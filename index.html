@@ -116,6 +116,11 @@
       var evenBackground = "#fed766";
       var oddText = "#fff";
       var evenText = "#000";
+      var noOfSnakes = rand(1, 8);
+      var noOfLadder = rand(1, 10);
+      var snakes = []
+      var snakeStartPos = []
+      var ladders = []
 
 
 
@@ -124,23 +129,15 @@
 
       makeBoard();
 
-
+      for (var i = 1; i <= noOfSnakes; i++) {
+         var pos = rand(31, 99);
+         renderSnake(i, pos);
+         snakes.push({ start: pos });
+      }
       for (let i = 1; i <= 4; i++) {
          $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
       }
-      //Plotting Snakes
-      function plotSnake(snakeNum, pos) {
-         var img = document.getElementById("snake"+snakeNum);
-         console.log($("#snake" + snakeNum).attr("data-headx"));
-         var y = Math.floor((boardColumn * boardColumn - pos)/ 10) ;
-         var shift = 0;
-         if(y%2!=0){
-            shift = Number($("#snake" + snakeNum).attr("data-headx"));
-         }else{
-            shift = -Number($("#snake" + snakeNum).attr("data-headx"));
-         }
-         ctx.drawImage(img, calcX(pos-shift), calcY(pos), $("#snake"+snakeNum).width(), $("#snake"+snakeNum).height());
-      }
+
 
 
 
@@ -206,18 +203,41 @@
          return x * boxSize;
       }
 
-      function makePoint(pos) {
-         ctx.beginPath();
-         ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI);
-         ctx.stroke();
+      //Render Snakes
+      function renderSnake(snakeNum, pos) {
+         // var img = document.getElementById("snake" + snakeNum);
+         // console.log($("#snake" + snakeNum).attr("data-headx"));
+         var y = Math.floor((boardColumn * boardColumn - pos) / 10);
+         var shift = 0;
+         if (y % 2 != 0) {
+            shift = Number($("#snake" + snakeNum).attr("data-headx"));
+         } else {
+            shift = -Number($("#snake" + snakeNum).attr("data-headx"));
+         }
+         $("#snake" + snakeNum).css({ "display": "block", "top": calcY(pos), "left": calcX(pos - shift) });
       }
 
+      //Plotting Snakes
+      function plotSnake(snakeNum, pos) {
+         var img = document.getElementById("snake" + snakeNum);
+         console.log($("#snake" + snakeNum).attr("data-headx"));
+         var y = Math.floor((boardColumn * boardColumn - pos) / 10);
+         var shift = 0;
+         if (y % 2 != 0) {
+            shift = Number($("#snake" + snakeNum).attr("data-headx"));
+         } else {
+            shift = -Number($("#snake" + snakeNum).attr("data-headx"));
+         }
+         ctx.drawImage(img, calcX(pos - shift), calcY(pos), $("#snake" + snakeNum).width(), $("#snake" + snakeNum).height());
+      }
+
+      // Useful Functions - rand, movePlayer, makePoint
+      
       function rand(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
+      function movePlayer(player, pos) { $("#player" + player).css({ top: calcY(pos), left: calcX(pos) }); }
+      function makePoint(pos) {ctx.beginPath();ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI);ctx.stroke();}
+      
 
-      function movePlayer(player, pos) {
-
-         $("#player" + player).css({ top: calcY(pos), left: calcX(pos) });
-      }
 
    </script>
 
