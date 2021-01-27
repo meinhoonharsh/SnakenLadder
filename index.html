@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
+
+      #canvasdiv {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-direction: column;
+         height: 100vh;
+         position: relative;
+
+      }
+
+      #startingZone {
+         width: 500px;
+         position: relative;
+      }
+
+      #test {
+         width: 500px;
+         position: relative;
+      }
+
+      #test img {
+         position: absolute;
+         top: 0px;
+         transition: 1s ease;
+      }
+
+      #startingZone img {
+         position: absolute;
+         top: 500px;
+         transition: 1s ease;
+      }
+
+      #startingZone img:nth-child(1) {
+         left: 0px;
+      }
+
+      #startingZone img:nth-child(2) {
+         left: 20px;
+      }
+
+      #startingZone img:nth-child(3) {
+         left: 40px;
+      }
+
+      #startingZone img:nth-child(4) {
+         left: 60px;
+      }
+
+      .hidden {
+         display: none;
+         /* opacity: 0; */
+      }
+   </style>
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+   <div id="canvasdiv">
+      <div id="winnerZone"></div>
+      <div id="test">
+         <img src="img/snake01.png" class="hidden" id="snake1" data-down="4" data-side="2" data-bottom="4"
+            data-right="2" width="130px" data-headx="0">
+         <img src="img/snake02.png" class="hidden" id="snake2" data-down="5" data-side="-2" data-bottom="5"
+            data-right="2" width="115px" data-headx="2">
+         <img src="img/snake03.png" class="hidden" id="snake3" data-down="3" data-side="2" data-bottom="3"
+            data-right="2" width="115px" data-headx="0">
+         <img src="img/snake04.png" class="hidden" id="snake4" data-down="3" data-side="1" data-bottom="3"
+            data-right="2" width="115px" data-headx="0">
+         <img src="img/snake05.png" class="hidden" id="snake5" data-down="2" data-side="0" data-bottom="2"
+            data-right="2" width="135px" data-headx="0">
+         <img src="img/snake06.png" class="hidden" id="snake6" data-down="2" data-side="0" data-bottom="2"
+            data-right="2" width="135px" data-headx="0">
+         <img src="img/snake07.png" class="hidden" id="snake7" data-down="4" data-side="0" data-bottom="4"
+            data-right="0" width="45px" data-headx="0">
+         <img src="img/snake08.png" class="hidden" id="snake8" data-down="5" data-side="-2" data-bottom="5"
+            data-right="2" width="115px" data-headx="2">
+
+
+         <!-- <img src="img/ladder01.png" id="ladder1" data-down="4" data-side="-2" data-bottom="4" data-right="2" width="135px" data-headx="2"> -->
+
+      </div>
+      <div id="startingZone">
+         <!-- <img src="img/player1.png" alt="Red Player" width="50px">
+         <img src="img/player2.png" alt="Red Player" width="50px">
+         <img src="img/player3.png" alt="Red Player" width="50px">
+         <img src="img/player4.png" alt="Red Player" width="50px"> -->
+      </div>
+      <canvas id="myCanvas" width="500" height="500" style="border:1px solid #c3c3c3;">
+         Your browser does not support the canvas element.
+      </canvas>
+
+   </div>
+
+   <script>
+
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+
+      var boardSize = 500;
+      var boardColumn = 10;
+      var boxSize = boardSize / boardColumn;
+      var oddBackground = "#2ab7ca";
+      var evenBackground = "#fed766";
+      var oddText = "#fff";
+      var evenText = "#000";
+
+
+
+
+
+
+      makeBoard();
+
+
+      for (let i = 1; i <= 4; i++) {
+         $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
+      }
+      //Plotting Snakes
+      function plotSnake(snakeNum, pos) {
+         var img = document.getElementById("snake"+snakeNum);
+         console.log($("#snake" + snakeNum).attr("data-headx"));
+         var y = Math.floor((boardColumn * boardColumn - pos)/ 10) ;
+         var shift = 0;
+         if(y%2!=0){
+            shift = Number($("#snake" + snakeNum).attr("data-headx"));
+         }else{
+            shift = -Number($("#snake" + snakeNum).attr("data-headx"));
+         }
+         ctx.drawImage(img, calcX(pos-shift), calcY(pos), $("#snake"+snakeNum).width(), $("#snake"+snakeNum).height());
+      }
+
+
+
+
+
+
+
+      //Making Board
+      function makeBoard() {
+         var n = boardColumn * boardColumn;
+         for (let i = 1; i <= boardColumn; i++) {
+            for (let j = 1; j <= boardColumn; j++) {
+
+               if ((i % 2 == 0 && j % 2 == 1) || (i % 2 == 1 && j % 2 == 0)) {
+                  ctx.fillStyle = evenBackground;
+               } else {
+                  ctx.fillStyle = oddBackground;
+               }
+               ctx.fillRect(boxSize * j - boxSize, boxSize * i - boxSize, (boxSize * j), boxSize * i);
+
+
+               if ((i % 2 == 0 && j % 2 == 1) || (i % 2 == 1 && j % 2 == 0)) {
+
+                  ctx.fillStyle = evenText;
+               } else {
+                  ctx.fillStyle = oddText;
+               }
+               if (i % 2 == 0) {
+                  var number = n + j - boardColumn;
+               } else {
+                  var number = n - j + 1;
+               }
+               ctx.fillText(number, (boxSize * j) - boxSize + 10, (boxSize * i) - boxSize + 15);
+
+            }
+            n -= boardColumn;
+
+
+         }
+      }
+
+      //Functions for Calculating X and Y
+      function calcY(pos) {
+         var a = boardColumn * boardColumn - pos;
+         var y = Math.floor(a / 10) * boxSize;
+         // console.log("A= "+a);
+         // console.log("y= " + y); 
+         return y;
+      }
+      function calcX(pos) {
+         var a = boardColumn * boardColumn - pos;
+         var y = Math.floor(a / 10);
+         var x = a - y * boardColumn;
+
+         if (y % 2 == 1) {
+            x = boardColumn - x - 1;
+         } else {
+            x = x;
+         }
+         // console.log("A= "+a);
+         // console.log("y= " + y); 
+         // console.log("x= " + x); 
+         return x * boxSize;
+      }
+
+      function makePoint(pos) {
+         ctx.beginPath();
+         ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI);
+         ctx.stroke();
+      }
+
+      function rand(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
+
+      function movePlayer(player, pos) {
+
+         $("#player" + player).css({ top: calcY(pos), left: calcX(pos) });
+      }
+
+   </script>
+
+</body>
+
+</html>
