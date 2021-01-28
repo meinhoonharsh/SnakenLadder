@@ -71,22 +71,26 @@
    <div id="canvasdiv">
       <div id="winnerZone"></div>
       <div id="test">
-         <img src="img/snake01.png" class="hidden" id="snake1" data-down="4" data-side="2" data-bottom="4"
+         <img src="img/snake01.png" class="hidden" id="snake1" data-down="4" data-left="0" data-side="1" data-bottom="4"
             data-right="2" width="130px" data-headx="0">
-         <img src="img/snake02.png" class="hidden" id="snake2" data-down="5" data-side="-2" data-bottom="5"
-            data-right="2" width="115px" data-headx="2">
-         <img src="img/snake03.png" class="hidden" id="snake3" data-down="3" data-side="2" data-bottom="3"
+         <img src="img/snake03.png" class="hidden" id="snake2" data-down="3" data-left="0" data-side="2" data-bottom="3"
             data-right="2" width="115px" data-headx="0">
-         <img src="img/snake04.png" class="hidden" id="snake4" data-down="3" data-side="1" data-bottom="3"
+         <img src="img/snake04.png" class="hidden" id="snake3" data-down="3" data-left="0" data-side="1" data-bottom="3"
             data-right="2" width="115px" data-headx="0">
-         <img src="img/snake05.png" class="hidden" id="snake5" data-down="2" data-side="0" data-bottom="2"
+         <img src="img/snake05.png" class="hidden" id="snake4" data-down="2" data-left="0" data-side="0" data-bottom="2"
             data-right="2" width="135px" data-headx="0">
-         <img src="img/snake06.png" class="hidden" id="snake6" data-down="2" data-side="0" data-bottom="2"
+         <img src="img/snake06.png" class="hidden" id="snake5" data-down="2" data-left="0" data-side="0" data-bottom="2"
             data-right="2" width="135px" data-headx="0">
-         <img src="img/snake07.png" class="hidden" id="snake7" data-down="4" data-side="0" data-bottom="4"
+         <img src="img/snake07.png" class="hidden" id="snake6" data-down="4" data-left="0" data-side="0" data-bottom="4"
             data-right="0" width="45px" data-headx="0">
-         <img src="img/snake08.png" class="hidden" id="snake8" data-down="5" data-side="-2" data-bottom="5"
-            data-right="2" width="115px" data-headx="2">
+         <img src="img/snake01.png" class="hidden" id="snake7" data-down="4" data-left="0" data-side="2" data-bottom="4"
+            data-right="2" width="130px" data-headx="0">
+         <img src="img/snake03.png" class="hidden" id="snake8" data-down="3" data-left="0" data-side="2" data-bottom="3"
+            data-right="2" width="115px" data-headx="0">
+
+
+         <!-- <img src="img/snake02.png" class="hidden" id="snake2" data-down="5" data-left="2" data-side="-2" data-bottom="5" data-right="0" width="115px" data-headx="2"> -->
+         <!-- <img src="img/snake08.png" class="hidden" id="snake8" data-down="5" data-left="2" data-side="-2" data-bottom="5" data-right="0" width="115px" data-headx="2"> -->
 
 
          <!-- <img src="img/ladder01.png" id="ladder1" data-down="4" data-side="-2" data-bottom="4" data-right="2" width="135px" data-headx="2"> -->
@@ -118,9 +122,10 @@
       var evenText = "#000";
       var noOfSnakes = rand(1, 8);
       var noOfLadder = rand(1, 10);
-      var snakes = []
-      var snakeStartPos = []
-      var ladders = []
+      var snakeHead = []
+      var snakeTail = []
+      var ladderHead = []
+      var ladderTail = []
 
 
 
@@ -129,11 +134,83 @@
 
       makeBoard();
 
+
+
+      //Plotting Snakes
       for (var i = 1; i <= noOfSnakes; i++) {
-         var pos = rand(31, 99);
+         var pos = getSnakePos(i);
+
          renderSnake(i, pos);
-         snakes.push({ start: pos });
+         snakeHead.push(pos);
+         snakeTail.push(getSnakeTail(i, pos));
+         function getSnakePos(snakeNum) {
+
+            var pos = rand(31, 99);
+            var snakeRight = Number($("#snake" + snakeNum).attr("data-right"));
+            var snakeBottom = Number($("#snake" + snakeNum).attr("data-bottom"));
+
+
+            //Shifting from Bottom and Left
+            var bottom = Math.ceil(pos / 10) - 1;
+            if (snakeBottom >= bottom) { pos += 10; }
+
+            //for left to right
+            if (Math.ceil(pos / 10) % 2 != 0) {
+               var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+               if (snakeRight >= right) { pos -= snakeRight; }
+            }
+            //for right to left
+            else {
+               var right = (pos % 10) - 1;
+               if (snakeRight >= right) { pos += snakeRight; }
+            }
+
+            if (snakeHead.includes(pos)) {
+               return getSnakePos(snakeNum);
+            } else if (snakeTail.includes(pos)) {
+               return getSnakePos(snakeNum);
+            } else if (snakeHead.includes(getSnakeTail(snakeNum, pos))) {
+               return getSnakePos(snakeNum);
+            }
+            else {
+               return pos;
+            }
+            // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
+
+         }
+
+         function getSnakeTail(snakeNum, pos) {
+            var bottom = 0;
+            var snakeRight = Number($("#snake" + snakeNum).attr("data-right"));
+            var snakeSide = Number($("#snake" + snakeNum).attr("data-side"));
+            var snakeDown = Number($("#snake" + snakeNum).attr("data-bottom"));
+            if (snakeDown % 2 == 0) {
+               //for left to right
+               if (Math.ceil(pos / 10) % 2 != 0) {
+                  bottom = pos - (snakeDown * 10) + snakeSide;
+               }
+               //for right to left
+               else {
+                  bottom = pos - (snakeDown * 10) - snakeSide;
+               }
+            } else {
+               //for left to right
+               if (Math.ceil(pos / 10) % 2 != 0) {
+                  var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1 ;
+                  bottom = pos - ((snakeDown - 1) * 10) - snakeSide - (2 * left) - 1;
+               }
+               //for right to left
+               else {
+                  var right = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+                  bottom = pos - ((snakeDown - 1) * 10) + snakeSide - (2 * right) - 1;
+                  console.log("right :" + right + " pos :" + pos + " bottom :" + bottom);
+               }
+            }
+            return bottom;
+         }
       }
+
+      //Plotting Players
       for (let i = 1; i <= 4; i++) {
          $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
       }
@@ -208,13 +285,15 @@
          // var img = document.getElementById("snake" + snakeNum);
          // console.log($("#snake" + snakeNum).attr("data-headx"));
          var y = Math.floor((boardColumn * boardColumn - pos) / 10);
-         var shift = 0;
-         if (y % 2 != 0) {
-            shift = Number($("#snake" + snakeNum).attr("data-headx"));
-         } else {
-            shift = -Number($("#snake" + snakeNum).attr("data-headx"));
-         }
-         $("#snake" + snakeNum).css({ "display": "block", "top": calcY(pos), "left": calcX(pos - shift) });
+         // var shift = 0;
+         // if (y % 2 != 0) {
+         //    shift = Number($("#snake" + snakeNum).attr("data-headx"));
+         // } else {
+         //    shift = -Number($("#snake" + snakeNum).attr("data-headx"));
+         // }
+
+         // console.log("pos = " + pos + "shiftt=" + shift);
+         $("#snake" + snakeNum).css({ "display": "block", "top": calcY(pos), "left": calcX(pos) });
       }
 
       //Plotting Snakes
@@ -228,15 +307,16 @@
          } else {
             shift = -Number($("#snake" + snakeNum).attr("data-headx"));
          }
+
          ctx.drawImage(img, calcX(pos - shift), calcY(pos), $("#snake" + snakeNum).width(), $("#snake" + snakeNum).height());
       }
 
       // Useful Functions - rand, movePlayer, makePoint
-      
+
       function rand(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
       function movePlayer(player, pos) { $("#player" + player).css({ top: calcY(pos), left: calcX(pos) }); }
-      function makePoint(pos) {ctx.beginPath();ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI);ctx.stroke();}
-      
+      function makePoint(pos) { ctx.beginPath(); ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI); ctx.stroke(); }
+
 
 
    </script>
