@@ -93,7 +93,26 @@
          <!-- <img src="img/snake08.png" class="hidden" id="snake8" data-down="5" data-left="2" data-side="-2" data-bottom="5" data-right="0" width="115px" data-headx="2"> -->
 
 
-         <!-- <img src="img/ladder01.png" id="ladder1" data-down="4" data-side="-2" data-bottom="4" data-right="2" width="135px" data-headx="2"> -->
+         <img src="img/ladder01.png" id="ladder1" class="hidden" data-down="3" data-side="-1" data-left="1"
+            data-right="0" width="100px" data-headx="1">
+         <img src="img/ladder02.png" id="ladder2" class="hidden" data-down="3" data-side="0" data-left="0"
+            data-right="0" width="35px" data-headx="0">
+         <img src="img/ladder03.png" id="ladder3" class="hidden" data-down="2" data-side="1" data-left="0"
+            data-right="2" width="100px" data-headx="0">
+         <img src="img/ladder04.png" id="ladder4" class="hidden" data-down="1" data-side="-1" data-left="1"
+            data-right="0" width="69px" data-headx="1">
+         <img src="img/ladder05.png" id="ladder5" class="hidden" data-down="4" data-side="0" data-left="0"
+            data-right="0" width="50px" data-headx="0">
+         <img src="img/ladder06.png" id="ladder6" class="hidden" data-down="2" data-side="-1" data-left="2"
+            data-right="0" width="70px" data-headx="1">
+         <img src="img/ladder07.png" id="ladder7" class="hidden" data-down="2" data-side="0" data-left="0"
+            data-right="0" width="35px" data-headx="0">
+         <img src="img/ladder08.png" id="ladder8" class="hidden" data-down="1" data-side="0" data-left="0"
+            data-right="0" width="30px" data-headx="0">
+         <img src="img/ladder09.png" id="ladder9" class="hidden" data-down="2" data-side="-1" data-left="1"
+            data-right="0" width="100px" data-headx="1">
+         <img src="img/ladder10.png" id="ladder10" class="hidden" data-down="3" data-side="1" data-left="0"
+            data-right="1" width="100px" data-headx="0">
 
       </div>
       <div id="startingZone">
@@ -122,6 +141,8 @@
       var evenText = "#000";
       var noOfSnakes = rand(1, 8);
       var noOfLadder = rand(1, 10);
+      // var noOfSnakes = 8;
+      // var noOfLadder = 10;
       var snakeHead = []
       var snakeTail = []
       var ladderHead = []
@@ -136,80 +157,6 @@
 
 
 
-      //Plotting Snakes
-      for (var i = 1; i <= noOfSnakes; i++) {
-         var pos = getSnakePos(i);
-
-         renderSnake(i, pos);
-         snakeHead.push(pos);
-         snakeTail.push(getSnakeTail(i, pos));
-         function getSnakePos(snakeNum) {
-
-            var pos = rand(31, 99);
-            var snakeRight = Number($("#snake" + snakeNum).attr("data-right"));
-            var snakeBottom = Number($("#snake" + snakeNum).attr("data-bottom"));
-
-
-            //Shifting from Bottom and Left
-            var bottom = Math.ceil(pos / 10) - 1;
-            if (snakeBottom >= bottom) { pos += 10; }
-
-            //for left to right
-            if (Math.ceil(pos / 10) % 2 != 0) {
-               var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
-               if (snakeRight >= right) { pos -= snakeRight; }
-            }
-            //for right to left
-            else {
-               var right = (pos % 10) - 1;
-               if (snakeRight >= right) { pos += snakeRight; }
-            }
-
-            if (snakeHead.includes(pos)) {
-               return getSnakePos(snakeNum);
-            } else if (snakeTail.includes(pos)) {
-               return getSnakePos(snakeNum);
-            } else if (snakeHead.includes(getSnakeTail(snakeNum, pos))) {
-               return getSnakePos(snakeNum);
-            }
-            else {
-               return pos;
-            }
-            // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
-
-         }
-
-         function getSnakeTail(snakeNum, pos) {
-            var bottom = 0;
-            var snakeRight = Number($("#snake" + snakeNum).attr("data-right"));
-            var snakeSide = Number($("#snake" + snakeNum).attr("data-side"));
-            var snakeDown = Number($("#snake" + snakeNum).attr("data-bottom"));
-            if (snakeDown % 2 == 0) {
-               //for left to right
-               if (Math.ceil(pos / 10) % 2 != 0) {
-                  bottom = pos - (snakeDown * 10) + snakeSide;
-               }
-               //for right to left
-               else {
-                  bottom = pos - (snakeDown * 10) - snakeSide;
-               }
-            } else {
-               //for left to right
-               if (Math.ceil(pos / 10) % 2 != 0) {
-                  var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1 ;
-                  bottom = pos - ((snakeDown - 1) * 10) - snakeSide - (2 * left) - 1;
-               }
-               //for right to left
-               else {
-                  var right = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
-                  bottom = pos - ((snakeDown - 1) * 10) + snakeSide - (2 * right) - 1;
-                  console.log("right :" + right + " pos :" + pos + " bottom :" + bottom);
-               }
-            }
-            return bottom;
-         }
-      }
-
       //Plotting Players
       for (let i = 1; i <= 4; i++) {
          $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
@@ -220,11 +167,11 @@
 
 
 
-
-
       //Making Board
       function makeBoard() {
          var n = boardColumn * boardColumn;
+
+         //MAking Actual Board
          for (let i = 1; i <= boardColumn; i++) {
             for (let j = 1; j <= boardColumn; j++) {
 
@@ -254,6 +201,181 @@
 
 
          }
+
+
+         //Plotting Snakes
+         for (var i = 1; i <= noOfSnakes; i++) {
+            var pos = getSnakePos(i);
+
+            renderSnake(i, pos);
+            snakeHead.push(pos);
+            snakeTail.push(getSnakeTail(i, pos));
+            function getSnakePos(snakeNum) {
+
+               var pos = rand(31, 99);
+               var snakeRight = Number($("#snake" + snakeNum).attr("data-right"));
+               var snakeBottom = Number($("#snake" + snakeNum).attr("data-bottom"));
+
+
+               //Shifting from Bottom and Left
+               var bottom = Math.ceil(pos / 10) - 1;
+               if (snakeBottom >= bottom) { pos += 10; }
+
+               //for left to right
+               if (Math.ceil(pos / 10) % 2 != 0) {
+                  var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+                  if (snakeRight >= right) { pos -= snakeRight; }
+               // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
+
+               }
+               //for right to left
+               else {
+                  var right = (pos % 10) - 1;
+                  if (snakeRight >= right) { pos += snakeRight; }
+               }
+
+               if (snakeHead.includes(pos)) {
+                  return getSnakePos(snakeNum);
+               } else if (snakeTail.includes(pos)) {
+                  return getSnakePos(snakeNum);
+               } else if (snakeHead.includes(getSnakeTail(snakeNum, pos))) {
+                  return getSnakePos(snakeNum);
+               } else if (snakeTail.includes(getSnakeTail(snakeNum, pos))) {
+                  return getSnakePos(snakeNum);
+               }
+               else {
+                  return pos;
+               }
+               // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
+
+            }
+
+            function getSnakeTail(snakeNum, pos) {
+               var bottom = 0;
+               var snakeRight = Number($("#snake" + snakeNum).attr("data-right"));
+               var snakeSide = Number($("#snake" + snakeNum).attr("data-side"));
+               var snakeDown = Number($("#snake" + snakeNum).attr("data-bottom"));
+               if (snakeDown % 2 == 0) {
+                  //for left to right
+                  if (Math.ceil(pos / 10) % 2 != 0) {
+                     bottom = pos - (snakeDown * 10) + snakeSide;
+                  }
+                  //for right to left
+                  else {
+                     bottom = pos - (snakeDown * 10) - snakeSide;
+                  }
+               } else {
+                  //for left to right
+                  if (Math.ceil(pos / 10) % 2 != 0) {
+                     var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+                     bottom = pos - ((snakeDown - 1) * 10) - snakeSide - (2 * left) - 1;
+                  }
+                  //for right to left
+                  else {
+                     var right = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+                     bottom = pos - ((snakeDown - 1) * 10) + snakeSide - (2 * right) - 1;
+                     // console.log("right :" + right + " pos :" + pos + " bottom :" + bottom);
+                  }
+               }
+               return bottom;
+            }
+         }
+
+
+         //Plotting Ladder
+         for (var i = 1; i <= noOfLadder; i++) {
+            var pos = getLadderPos(i);
+
+            renderLadder(i, pos);
+            ladderHead.push(pos);
+            ladderTail.push(getLadderTail(i, pos));
+            function getLadderPos(ladderNum) {
+
+               var pos = rand(31, 99);
+               var ladderRight = Number($("#ladder" + ladderNum).attr("data-right"));
+               var ladderLeft = Number($("#ladder" + ladderNum).attr("data-left"));
+               var ladderBottom = Number($("#ladder" + ladderNum).attr("data-down"));
+
+
+               //Shifting from Bottom and Left
+               var bottom = Math.ceil(pos / 10) - 1;
+               if (ladderBottom >= bottom) { pos += 10; }
+
+               //for left to right
+               if (Math.ceil(pos / 10) % 2 != 0) {
+                  var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+                  if (ladderRight >= right) { pos -= ladderRight; }
+                  var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+
+                  console.log("pos = " + pos + " left=" + left + " ladderRight=" + ladderRight);
+                  if (ladderLeft >= left) { pos += ladderLeft; }
+
+               }
+               //for right to left
+               else {
+                  var right = (pos % 10) - 1;
+                  if (ladderRight >= right) { pos += ladderRight; }
+                  var left = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+                  if (ladderLeft >= left) { pos += ladderLeft; }
+               }
+
+               if (ladderHead.includes(pos)) {
+                  return getLadderPos(ladderNum);
+               } else if (ladderTail.includes(pos)) {
+                  return getLadderPos(ladderNum);
+               } else if (ladderHead.includes(getLadderTail(ladderNum, pos))) {
+                  return getLadderPos(ladderNum);
+               } else if (ladderTail.includes(getLadderTail(ladderNum, pos))) {
+                  return getLadderPos(ladderNum);
+               } else if (snakeHead.includes(pos)) {
+                  return getLadderPos(ladderNum);
+               } else if (snakeTail.includes(pos)) {
+                  return getLadderPos(ladderNum);
+               } else if (snakeHead.includes(getLadderTail(ladderNum, pos))) {
+                  return getLadderPos(ladderNum);
+               } else if (snakeTail.includes(getLadderTail(ladderNum, pos))) {
+                  return getLadderPos(ladderNum);
+               }
+               else {
+                  return pos;
+               }
+               // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
+
+            }
+
+            function getLadderTail(ladderNum, pos) {
+               var bottom = 0;
+               var ladderRight = Number($("#ladder" + ladderNum).attr("data-right"));
+               var ladderSide = Number($("#ladder" + ladderNum).attr("data-side"));
+               var ladderDown = Number($("#ladder" + ladderNum).attr("data-down"));
+               if (ladderDown % 2 == 0) {
+                  //for left to right
+                  if (Math.ceil(pos / 10) % 2 != 0) {
+                     bottom = pos - (ladderDown * 10) + ladderSide;
+                  }
+                  //for right to left
+                  else {
+                     bottom = pos - (ladderDown * 10) - ladderSide;
+                  }
+               } else {
+                  //for left to right
+                  if (Math.ceil(pos / 10) % 2 != 0) {
+                     var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+                     bottom = pos - ((ladderDown - 1) * 10) - ladderSide - (2 * left) - 1;
+                  }
+                  //for right to left
+                  else {
+                     var right = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+                     bottom = pos - ((ladderDown - 1) * 10) + ladderSide - (2 * right) - 1;
+                     // console.log("right :" + right + " pos :" + pos + " bottom :" + bottom);
+                  }
+               }
+               return bottom;
+            }
+         }
+
+
+
       }
 
       //Functions for Calculating X and Y
@@ -294,6 +416,22 @@
 
          // console.log("pos = " + pos + "shiftt=" + shift);
          $("#snake" + snakeNum).css({ "display": "block", "top": calcY(pos), "left": calcX(pos) });
+      }
+
+      //Render Ladder
+      function renderLadder(ladderNum, pos) {
+         // var img = document.getElementById("snake" + snakeNum);
+         // console.log($("#snake" + snakeNum).attr("data-headx"));
+         var y = Math.floor((boardColumn * boardColumn - pos) / 10);
+         var shift = 0;
+         if (y % 2 != 0) {
+            shift = Number($("#ladder" + ladderNum).attr("data-headx"));
+         } else {
+            shift = -Number($("#ladder" + ladderNum).attr("data-headx"));
+         }
+
+         // console.log("pos = " + pos + "shiftt=" + shift);
+         $("#ladder" + ladderNum).css({ "display": "block", "top": calcY(pos)+5, "left": calcX(pos - shift)+5 });
       }
 
       //Plotting Snakes
