@@ -14,7 +14,7 @@
          justify-content: center;
          align-items: center;
          flex-direction: column;
-         height: 100vh;
+         height: 97vh;
          position: relative;
 
       }
@@ -61,8 +61,20 @@
          display: none;
          /* opacity: 0; */
       }
+      #screen{
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         position: fixed;
+         top:0;
+         left:0;
+         width: 100vw;
+         height:100%;
+         color:black;
+         background: #ffff88;
+      }
    </style>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
@@ -126,6 +138,26 @@
       </canvas>
 
    </div>
+   <div id="screen" class="">
+      <div id="box">
+         <img src="img/snl.png" alt="" width="400px">
+         <center><h2>Select no. of Players</h2>
+         <!-- <button class="w3-button w3-blue w3-round-xxlarge">1 Player</button>
+         <button class="w3-button w3-blue w3-round-xxlarge">2 Player</button><br><br>
+         <button class="w3-button w3-blue w3-round-xxlarge">3 Player</button>
+         <button class="w3-button w3-blue w3-round-xxlarge">4 Player</button> -->
+         <select id="noofplayer" class="w3-select" name="option">
+            <option value="0" disabled selected>Choose your option</option>
+            <option value="1">1 Player</option>
+            <option value="2">2 Players</option>
+            <option value="3">3 Players</option>
+            <option value="4">4 Players</option>
+
+         </select>
+         <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>
+         </center>
+      </div>
+   </div>
 
    <script>
 
@@ -143,23 +175,32 @@
       var noOfLadder = rand(1, 10);
       // var noOfSnakes = 8;
       // var noOfLadder = 10;
-      var snakeHead = []
-      var snakeTail = []
-      var ladderHead = []
-      var ladderTail = []
+      var snakeHead = [];
+      var snakeTail = [];
+      var ladderHead = [];
+      var ladderTail = [];
+      var noOfPlayer = 0;
 
 
+      
+      function updatePlayer(){
+         if($('#noofplayer').val()!=null){
+            $('#screen').hide();
+            startGame();
+         }else{
+            alert("Please Select No. of Players");
+         }
+      }
 
 
+      //Initialiing the Game
+      function startGame() {
+         makeBoard();
 
-
-      makeBoard();
-
-
-
-      //Plotting Players
-      for (let i = 1; i <= 4; i++) {
-         $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
+         //Plotting Players
+         for (let i = 1; i <= 4; i++) {
+            $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
+         }
       }
 
 
