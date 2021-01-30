@@ -61,20 +61,76 @@
          display: none;
          /* opacity: 0; */
       }
-      #screen{
+
+      #screen {
          display: flex;
          justify-content: center;
          align-items: center;
          position: fixed;
-         top:0;
-         left:0;
+         top: 0;
+         left: 0;
          width: 100vw;
-         height:100%;
-         color:black;
+         height: 100%;
+         color: black;
          background: #ffff88;
       }
+
+      .playerbox {
+         position: fixed;
+         height: 200px;
+         width: 200px;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-direction: column;
+      }
+
+      .playerbox span {
+         font-size: 1.6em;
+      }
+
+      .playerbox button,
+      .playerbox button img {
+         border: none;
+         border-radius: 20px;
+         outline: none;
+         transition: top 0.5s ease;
+      }
+
+      .playerbox .activebutton:hover {
+         position: relative;
+         top: -2px;
+
+         box-shadow: 0px 5px 4px black;
+         cursor: pointer;
+      }
+
+      .topleft {
+         top: 0;
+         left: 0;
+      }
+
+      .bottomleft {
+         bottom: 0;
+         left: 0;
+      }
+
+      .topright {
+         top: 0;
+         right: 0;
+      }
+
+      .bottomright {
+         bottom: 0;
+         right: 0;
+      }
+
+      .disabled {
+         background: grey !important;
+         color: white;
+      }
    </style>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
@@ -137,24 +193,49 @@
          Your browser does not support the canvas element.
       </canvas>
 
+
+
+
    </div>
+
+
+   <!-- <div class=" playerbox topleft disabled">
+      <span>Player 1</span>
+      <button id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg"
+            width="100px"></button>
+   </div>
+   <div class="playerbox w3-green bottomleft">
+      <span>Player 1</span>
+      <button id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg"
+            width="100px"></button>
+   </div>
+   <div class="playerbox w3-blue bottomright">
+      <span>Player 1</span>
+      <button id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg"
+            width="100px"></button>
+   </div>
+   <div class="playerbox w3-yellow topright">
+      <span>Player 1</span>
+      <button id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg"
+            width="100px"></button>
+   </div> -->
+
+   <!-- <//screen> -->
    <div id="screen" class="">
       <div id="box">
          <img src="img/snl.png" alt="" width="400px">
-         <center><h2>Select no. of Players</h2>
-         <!-- <button class="w3-button w3-blue w3-round-xxlarge">1 Player</button>
-         <button class="w3-button w3-blue w3-round-xxlarge">2 Player</button><br><br>
-         <button class="w3-button w3-blue w3-round-xxlarge">3 Player</button>
-         <button class="w3-button w3-blue w3-round-xxlarge">4 Player</button> -->
-         <select id="noofplayer" class="w3-select" name="option">
-            <option value="0" disabled selected>Choose your option</option>
-            <option value="1">1 Player</option>
-            <option value="2">2 Players</option>
-            <option value="3">3 Players</option>
-            <option value="4">4 Players</option>
+         <center>
+            <h2>Select no. of Players</h2>
 
-         </select>
-         <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>
+            <select id="noofplayer" class="w3-select" name="option">
+               <option value="0" disabled selected>Choose your option</option>
+               <option value="1">1 Player</option>
+               <option value="2">2 Players</option>
+               <option value="3">3 Players</option>
+               <option value="4">4 Players</option>
+
+            </select>
+            <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>
          </center>
       </div>
    </div>
@@ -180,27 +261,84 @@
       var ladderHead = [];
       var ladderTail = [];
       var noOfPlayer = 0;
+      var positions = [["topleft"],
+      ["topleft", "bottomright"],
+      ["topleft", "bottomleft", "bottomright"],
+      ["topleft", "bottomleft", "bottomright", "topright"]]
+      var colors = ["red", "green", "blue", "yellow"];
+      var playersPos = []
 
 
-      
-      function updatePlayer(){
-         if($('#noofplayer').val()!=null){
+      function updatePlayer() {
+         if ($('#noofplayer').val() != null) {
             $('#screen').hide();
+            noOfPlayer = $('#noofplayer').val();
+
             startGame();
-         }else{
+         } else {
             alert("Please Select No. of Players");
          }
       }
+      // startGame();
 
+      function giveChanceTo(playerNum) {
+         
+         if(playerNum>noOfPlayer){
+            playerNum = 1;
+         }
+         
+         for (let i = 1; i <= noOfPlayer; i++) {
+            $("#playerbox" + i).removeClass("w3-" + colors[i - 1]);
+            $("#playerbox" + i +" button").removeClass("activebutton");
+            $("#playerbox"+i+" button").prop('disabled', true);
+            $("#playerbox" + i).addClass("disabled");
+         }
+         
+         $("#playerbox"+playerNum).addClass("w3-" + colors[playerNum - 1]);
+         $("#playerbox" + playerNum+ " button").addClass("activebutton");
+         $("#playerbox" + playerNum + " button").prop('disabled', false);
+         $("#playerbox"+playerNum).removeClass("disabled");
+
+      }
+
+      function doChance(playerNum) {
+         $("#playerbox" + playerNum + " button").prop("disabled", true);
+         var val = rand(1,6);
+         var path = "img/dice/"+val + ".jpg"
+
+
+
+         var now = new Date().getTime();
+         $("#playerbox" + playerNum + " button img").attr("src", "img/dice/roll.gif")
+         
+         setTimeout(harsh, 2000,)
+         
+         function harsh() {
+            console.log(val);
+            
+            $("#playerbox" + playerNum + " button img").attr("src", path)
+            playersPos[playerNum - 1] +=val;
+            movePlayer(playerNum, playersPos[playerNum - 1]);
+            giveChanceTo(playerNum + 1);
+         }
+
+      }
+      function sleepFor(sleepDuration) {
+            var now = new Date().getTime();
+            while (new Date().getTime() < now + sleepDuration) { /* do nothing */ }
+         }
 
       //Initialiing the Game
       function startGame() {
          makeBoard();
 
          //Plotting Players
-         for (let i = 1; i <= 4; i++) {
+         for (let i = 1; i <= noOfPlayer; i++) {
             $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
+            $("body").append('<div id="playerbox'+i+'" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> Player ' + i + '</span><button onclick="doChance('+i+')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="100px"></button></div>');
+            playersPos.push(0);
          }
+         giveChanceTo(1);
       }
 
 
@@ -266,7 +404,7 @@
                if (Math.ceil(pos / 10) % 2 != 0) {
                   var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
                   if (snakeRight >= right) { pos -= snakeRight; }
-               // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
+                  // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
 
                }
                //for right to left
@@ -472,7 +610,7 @@
          }
 
          // console.log("pos = " + pos + "shiftt=" + shift);
-         $("#ladder" + ladderNum).css({ "display": "block", "top": calcY(pos)+5, "left": calcX(pos - shift)+5 });
+         $("#ladder" + ladderNum).css({ "display": "block", "top": calcY(pos) + 5, "left": calcX(pos - shift) + 5 });
       }
 
       //Plotting Snakes

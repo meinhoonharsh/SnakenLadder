@@ -1,0 +1,192 @@
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="favicon" href="images/harsh.jpg">
+    <!--  Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--  Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" >
+
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="description" content="I am a Full Stack Web Developer who used to Code in different languages like HTML, CSS, JavaScript,  PHP, MySQL and  there different Frameworks like jQuery, Bootstrap.css, Animate.css etc. As Well as I sometimes use CMS Platform (WordPress) to create a Website. My Hobby is to write Code.I have very different kind of Skills from various Fields like Web Development, UI/UX Development, Video Editing, Graphic Designing, PCB Development, Electronics, IoT (Internet of Things) and lot more.I also Create YouTube Videos about Learning Electronics & Web Development that gives me Pleasure.I always Willing to Learn Something New to Improve my Skills.">
+    <meta name="keywords" content="Harsh Vishwakarma,Harsh Vishwakarma Bhopal,Harsh Bhopal , Web Development in Bhopal, Web Developer in Bhopal, Harsh Vishwakarma Web Developer,Website Development in Bhopal, Bhopal Web Developer,Best Web Developer in Bhopal, Web Development Cheap,Harsh Vishwakarma Website">
+    <meta name="author" content="Harsh Vishwakarma">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap & w3.css-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<!--jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   
+   
+   
+   <title>Dice Roller | Harsh Vishwakarma | Web Developer</title>
+
+   <link rel="stylesheet" type="text/css" href="../css/layout.css">
+
+   <style type="text/css">
+   	@import url('https://fonts.googleapis.com/css2?family=Kufam:wght@500&display=swap');
+   	body{
+   		background-image: linear-gradient(40deg, #f5b844, #f5b844);
+
+   	}
+   	*{
+   		font-family: 'Kufam', cursive;
+
+   	}
+
+    .container{
+    	width: 100%;
+    	height: 100vh;
+    	display: flex;
+    	justify-content: center;
+    	align-items: center;
+    	flex-direction: column;
+
+
+    }
+    .content{
+    	width: 450px;
+    	background: #fff;
+    	border-radius: 30px;
+    	padding: 20px;
+    }
+    .input{
+    	width: 100%;
+    	margin-top: 10px;
+    	padding: 10px;
+    	border-radius: 20px;
+    	border: 1px solid #111;
+    	outline: none;
+    }
+    .button{
+    	background-image: linear-gradient(40deg,#1e257d,  #1e257d);
+    	outline: none;
+      color: #fff;
+      border: none;
+    }
+    button:hover,button:active,button:focus{
+    	outline: none;
+      border: none;
+    }
+    .button:hover{
+    	background-image: linear-gradient(40deg,   #f5b844, #f5b844);
+      color: #000;
+    }
+    h1{
+    	font-size: 4rem;
+    	color: #fff;
+    	font-family: 'Kufam', cursive;
+
+    }
+    #textbox{
+      font-size: 3rem;
+      width: 100%;
+      text-align: center;
+
+    }
+    #gifbox{
+      width: 100%;
+      border-radius: 20px;
+
+    }
+    @media only screen and (max-width: 500px) {
+
+    .content{
+      width: 400px;
+    }
+
+    }
+    @media only screen and (max-width: 400px) {
+
+    .content{
+      width: 300px;
+    }
+
+    }
+
+   </style>
+   
+   <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+
+   <script type="text/javascript" src="js/animation.js"></script>
+   <script type="text/javascript">
+   
+   </script>
+  </head>
+  <body>
+     <div class="container">
+     	<h1>Dice Roller</h1>
+     	<div class="content">
+
+     		<div class="addbox">
+     			<form action="javascript:">     	
+          <div id="showbox" style="display: none">
+
+          <img id="gifbox" src="">
+          <center><span id="textbox" style="display: none"></span></center>
+          
+        </div>		
+     			<button  id="add" name="text" class="input button">Roll Dice</button></form>
+
+
+     		</div>
+     	</div>
+     	
+     </div>
+
+
+
+    <script type="text/javascript">
+    	   
+             var tail = head = 0
+             var path =""
+    		$(document).ready(function(){
+    		$("#add").click(function(){
+
+
+
+             $("#showbox").fadeIn()
+
+             $("#textbox").fadeOut()
+             $("button").attr("disabled","true")
+             var showData = "Spinning....."
+             var val = Math.ceil(Math.random()*6)
+             var path = val+".jpg"
+
+
+             var ratio = tail/head             
+             console.log("Ratio : "+ratio)
+
+             var now = new Date().getTime();
+             $("img").attr("src","roll.gif")
+             setTimeout(harsh,2000)
+             function harsh(){
+
+             console.log(val)
+             $("#textbox").text(val)
+             $("#textbox").fadeIn() 
+
+             $("img").attr("src",path)  
+             $("button").removeAttr("disabled") 
+             }
+
+
+
+
+    		})
+    	})
+        
+    	
+    </script>
+  </body>
+  
+
+</html>
+
