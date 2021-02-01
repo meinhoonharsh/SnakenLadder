@@ -14,8 +14,14 @@
          justify-content: center;
          align-items: center;
          flex-direction: column;
-         height: 97vh;
+         height: 100vh;
          position: relative;
+         background-image: url('img/background.jpg');
+         background-position: center;
+         background-size: cover;
+         /* background: #ffff88; */
+
+
 
       }
 
@@ -73,6 +79,19 @@
          height: 100%;
          color: black;
          background: #ffff88;
+         flex-direction: row;
+      }
+
+      .alertbox {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100vw;
+         height: 100%;
+         background: rgba(0, 0, 0, 1);
       }
 
       .playerbox {
@@ -151,7 +170,7 @@
             data-right="2" width="135px" data-headx="0">
          <img src="img/snake07.png" class="hidden" id="snake6" data-down="4" data-left="0" data-side="0" data-bottom="4"
             data-right="0" width="45px" data-headx="0">
-         <img src="img/snake01.png" class="hidden" id="snake7" data-down="4" data-left="0" data-side="2" data-bottom="4"
+         <img src="img/snake01.png" class="hidden" id="snake7" data-down="4" data-left="0" data-side="1" data-bottom="4"
             data-right="2" width="130px" data-headx="0">
          <img src="img/snake03.png" class="hidden" id="snake8" data-down="3" data-left="0" data-side="2" data-bottom="3"
             data-right="2" width="115px" data-headx="0">
@@ -161,7 +180,7 @@
          <!-- <img src="img/snake08.png" class="hidden" id="snake8" data-down="5" data-left="2" data-side="-2" data-bottom="5" data-right="0" width="115px" data-headx="2"> -->
 
 
-         <img src="img/ladder01.png" id="ladder1" class="hidden" data-down="3" data-side="-1" data-left="1"
+         <img src="img/ladder01.png" id="ladder1" class="hidden" data-down="3" data-side="-1" data-left="2"
             data-right="0" width="100px" data-headx="1">
          <img src="img/ladder02.png" id="ladder2" class="hidden" data-down="3" data-side="0" data-left="0"
             data-right="0" width="35px" data-headx="0">
@@ -189,14 +208,31 @@
          <img src="img/player3.png" alt="Red Player" width="50px">
          <img src="img/player4.png" alt="Red Player" width="50px"> -->
       </div>
-      <canvas id="myCanvas" width="500" height="500" style="border:1px solid #c3c3c3;">
+      <canvas id="myCanvas" width="500" height="500" style="border:5px solid #8d6e63;">
          Your browser does not support the canvas element.
       </canvas>
 
 
 
-
+      <!-- <div class="w3-panel w3-green w3-display-container">
+         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+         <h3>Warning!</h3>
+         <p>Yellow often indicates a warning that might need attention.</p>
+      </div> -->
    </div>
+
+
+   <!-- <div id="id01" class="w3-modal" onclick="this.style.display='none'">
+      <div class="w3-modal-content w3-animate-zoom">
+   
+         <header class="w3-container w3-green">
+            <span onclick="document.getElementById('id01').style.display='none'"
+               class="w3-button w3-display-topright">&times;</span>
+            <h2>Modal Header</h2>
+            <p>Modal Footer</p>
+         </header>   
+      </div>
+   </div> -->
 
 
    <!-- <div class=" playerbox topleft disabled">
@@ -222,10 +258,10 @@
 
    <!-- <//screen> -->
    <div id="screen" class="">
-      <div id="box">
          <img src="img/snl.png" alt="" width="400px">
+         <div id="box">
          <center>
-            <h2>Select no. of Players</h2>
+            <h3>Select no. of Players</h3>
 
             <select id="noofplayer" class="w3-select" name="option">
                <option value="0" disabled selected>Choose your option</option>
@@ -233,15 +269,45 @@
                <option value="2">2 Players</option>
                <option value="3">3 Players</option>
                <option value="4">4 Players</option>
-
             </select>
+
+            <h3>Preference for Snake & Ladders Position</h3>
+            <input onchange="updatePreference()"  class="w3-radio" id="org" type="radio" name="gamepreference" value="organized">
+            <label for="org">Organized</label>
+
+            <input onchange="updatePreference()"  class="w3-radio" id="rand" type="radio" name="gamepreference" value="random">
+            <label for="rand">Random</label>
+
+            
+            <div id="selection-organized" style="display: none;">
+               <h3>Choose Board</h3>
+               <input class="w3-radio" id="board1" type="radio" name="board" value="0">
+               <label for="board1"><img src="img/board1.jpg" width="100px" alt="Board 1"></label>
+            
+               <input class="w3-radio" id="board2" type="radio" name="board" value="1">
+               <label for="board2"><img src="img/board2.jpg" width="100px" alt="Board 2"></label>
+            </div>
+
+            <div id="selection-random" style="display: none;">
+               <h3>No. of Snakes</h3>
+               <span id="snake-range-value">4</span>
+               <input class="w3-range" min="1" max="8" value="4" onchange="document.getElementById('snake-range-value').innerHTML=this.value" id="range-snake" type="range" name="range-snake" value="organized">
+               <input type="checkbox" name="checkbox-snake" id="checkbox-snake">
+            <label for="checkbox-snake">Random</label>
+
+               <h3>No. of Ladder</h3>
+               <span id="ladder-range-value">5</span>
+               <input class="w3-range" min="1" max="10" value="5" onchange="document.getElementById('ladder-range-value').innerHTML=this.value" id="range-ladder" type="range" name="range-ladder" value="random">
+               <input type="checkbox" name="checkbox-ladder" id="checkbox-ladder">
+            <label for="checkbox-ladder">Random</label>
+
+            </div>
             <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>
          </center>
       </div>
    </div>
 
    <script>
-
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d");
 
@@ -252,82 +318,260 @@
       var evenBackground = "#fed766";
       var oddText = "#fff";
       var evenText = "#000";
-      var noOfSnakes = rand(1, 8);
-      var noOfLadder = rand(1, 10);
-      // var noOfSnakes = 8;
-      // var noOfLadder = 10;
+      // var noOfSnakes = rand(1, 8);
+      // var noOfLadder = rand(1, 10);
+      var noOfSnakes = 0;
+      var noOfLadder = 0;
       var snakeHead = [];
       var snakeTail = [];
       var ladderHead = [];
       var ladderTail = [];
       var noOfPlayer = 0;
+      var winnerNum = 1;
+      var boardNumber = 0;
       var positions = [["topleft"],
       ["topleft", "bottomright"],
       ["topleft", "bottomleft", "bottomright"],
       ["topleft", "bottomleft", "bottomright", "topright"]]
       var colors = ["red", "green", "blue", "yellow"];
       var playersPos = []
+      var rollDice = new sound("sound/rolldice.mp3");
+      var snakeSound = new sound("sound/snake.mp3");
+      var ladderSound = new sound("sound/ladder.mp3");
+      var moveSound = new sound("sound/move.mp3");
+      var sixSound = new sound("sound/six.mp3");
+      var winnerSound = new sound("sound/winner.mp3");
+      var arrangements = [
+         {
+            snakeHead: [99, 65, 40, 25, 48, 78, 85],
+            snakeTail: [],
+            ladderHead: [51, 59, 57, 17, 93, 90, 30, 80],
+            ladderTail: []
+         },
+         {
+            snakeHead: [62,86,98,38],
+            snakeTail: [],
+            ladderHead: [47, 60, 72, 93, 49, 66],
+            ladderTail: []
+         }]
+      
+
+
+
+
+
+         $("#checkbox-snake").click(function () {
+               if ($(this).is(":checked")) {
+                  $("#range-snake").prop('disabled', true);
+                  $("#snake-range-value").hide();
+               } else {
+                  $("#range-snake").prop('disabled', false);
+                  $("#snake-range-value").show();
+               }
+            }); 
+            
+         $("#checkbox-ladder").click(function () {
+            if ($(this).is(":checked")) {
+               $("#range-ladder").prop('disabled', true);
+                  $("#ladder-range-value").hide();
+            } else {
+               $("#range-ladder").prop('disabled', false);
+                  $("#ladder-range-value").show();
+            }
+         });
+
+
+
+
+
+
+
+      function updatePreference() {
+         console.log("Iam in the function");
+         $('#selection-organized').slideUp();
+         $('#selection-random').slideUp();
+         if($('input[name="gamepreference"]:checked').val() == 'organized'){
+         $('#selection-organized').slideDown();
+
+         }else{
+         $('#selection-random').slideDown();
+
+         }
+      }
+
+
 
 
       function updatePlayer() {
-         if ($('#noofplayer').val() != null) {
+         if ($('#noofplayer').val() == null) {
+            // alert($('input[name="gamepreference"]:checked').val());
+            alert("Please Select No. of Players");
+         }else if($('input[name="gamepreference"]:checked').val() == undefined){
+
+            alert("Please Select any Preference \nOrganized or Random");
+         } else if ($('input[name="gamepreference"]:checked').val() == 'organized' && $('input[name="board"]:checked').val() == undefined) {
+
+            alert("Please Select a Board");
+         } else {
+
+            if ($('input[name="gamepreference"]:checked').val() == 'organized'){
+               boardNumber = $('input[name="board"]:checked').val();
+               noOfLadder = arrangements[boardNumber]['ladderHead'].length;
+               noOfSnakes = arrangements[boardNumber]['snakeHead'].length;
+            }else{
+
+               if ($('input[name="checkbox-snake"]').is(':checked')) {
+                  noOfSnakes = rand(1, 8);
+               } else {
+                  noOfSnakes = Number($('input[name="range-snake"]').val());
+               }
+
+               if ($('input[name="checkbox-ladder"]').is(':checked')) {
+                  noOfLadder = rand(1, 10);
+               } else {
+                  noOfLadder = Number($('input[name="range-ladder"]').val());
+               }
+            }
+
             $('#screen').hide();
             noOfPlayer = $('#noofplayer').val();
 
+            // var myMusic = new sound("sound/bgm.mp3");
+            // myMusic.play();
             startGame();
-         } else {
-            alert("Please Select No. of Players");
+            
          }
       }
-      // startGame();
 
       function giveChanceTo(playerNum) {
-         
-         if(playerNum>noOfPlayer){
+
+         if (playerNum > noOfPlayer) {
             playerNum = 1;
          }
-         
-         for (let i = 1; i <= noOfPlayer; i++) {
-            $("#playerbox" + i).removeClass("w3-" + colors[i - 1]);
-            $("#playerbox" + i +" button").removeClass("activebutton");
-            $("#playerbox"+i+" button").prop('disabled', true);
-            $("#playerbox" + i).addClass("disabled");
+         if (playersPos[playerNum - 1] >= 100) {
+            giveChanceTo(playerNum + 1);
+            console.log("This user is winner")
+         } else {
+
+            for (let i = 1; i <= noOfPlayer; i++) {
+               $("#playerbox" + i).removeClass("w3-" + colors[i - 1]);
+               $("#playerbox" + i + " button").removeClass("activebutton");
+               $("#playerbox" + i + " button").prop('disabled', true);
+               $("#playerbox" + i).addClass("disabled");
+            }
+
+            $("#playerbox" + playerNum).addClass("w3-" + colors[playerNum - 1]);
+            $("#playerbox" + playerNum + " button").addClass("activebutton");
+            $("#playerbox" + playerNum + " button").prop('disabled', false);
+            $("#playerbox" + playerNum).removeClass("disabled");
          }
-         
-         $("#playerbox"+playerNum).addClass("w3-" + colors[playerNum - 1]);
-         $("#playerbox" + playerNum+ " button").addClass("activebutton");
-         $("#playerbox" + playerNum + " button").prop('disabled', false);
-         $("#playerbox"+playerNum).removeClass("disabled");
+
 
       }
 
       function doChance(playerNum) {
+
          $("#playerbox" + playerNum + " button").prop("disabled", true);
-         var val = rand(1,6);
-         var path = "img/dice/"+val + ".jpg"
+         var val = rand(1, 7);
+         var path = "img/dice/" + val + ".jpg"
 
 
 
          var now = new Date().getTime();
          $("#playerbox" + playerNum + " button img").attr("src", "img/dice/roll.gif")
-         
+         rollDice.play();
+
          setTimeout(harsh, 2000,)
-         
+
          function harsh() {
             console.log(val);
-            
+
             $("#playerbox" + playerNum + " button img").attr("src", path)
-            playersPos[playerNum - 1] +=val;
+            gameSound = moveSound;
+            playersPos[playerNum - 1] += val;
+            if (playersPos[playerNum - 1] > 100) {
+               playersPos[playerNum - 1] -= val;
+               giveChanceTo(playerNum + 1);
+               return 0;
+            } else if (playersPos[playerNum - 1] == 100) {
+               gameSound = winnerSound;
+               playersPos[playerNum - 1] = 110;
+
+               $("#playerbox" + playerNum + " button img").attr("src","img/dice/winner"+winnerNum+".jpg");
+               alertbox(playerNum, colors[playerNum - 1], "Winner", "Player " + playerNum + " Won the Game & got " + winnerNum + " position");
+               winnerNum += 1;
+            }
             movePlayer(playerNum, playersPos[playerNum - 1]);
-            giveChanceTo(playerNum + 1);
+
+            //detecting Ladder
+            if (ladderTail.includes(playersPos[playerNum - 1])) {
+               for (let p = 0; p < ladderTail.length; p++) {
+                  const element = ladderTail[p];
+                  if (element == playersPos[playerNum - 1]) {
+                     gameSound = ladderSound;
+                     playersPos[playerNum - 1] = ladderHead[p];
+                     movePlayer(playerNum, playersPos[playerNum - 1]);
+                     break;
+                  }
+
+               }
+               console.log("ladder detected")
+            }
+            //detecting Snakes
+            if (snakeHead.includes(playersPos[playerNum - 1])) {
+               for (let p = 0; p < snakeTail.length; p++) {
+                  const element = snakeHead[p];
+
+                  if (element == playersPos[playerNum - 1]) {
+                     gameSound = snakeSound;
+                     playersPos[playerNum - 1] = snakeTail[p];
+                     movePlayer(playerNum, playersPos[playerNum - 1]);
+                     break;
+                  }
+
+               }
+               console.log("snake detected")
+            }
+            if (val == 6) {
+               gameSound = sixSound;
+               giveChanceTo(playerNum);
+            } else {
+
+               giveChanceTo(playerNum + 1);
+            }
+            gameSound.play();
          }
 
       }
-      function sleepFor(sleepDuration) {
-            var now = new Date().getTime();
-            while (new Date().getTime() < now + sleepDuration) { /* do nothing */ }
-         }
 
+
+
+
+      function alertbox(num, color, title, message) {
+         $("body").prepend('<div id="id0' + num + '" class="w3-modal alertbox" style="background:rgba(0,0,0,0.9);" onclick="this.style.display=\'none\'"> \
+            <div class="w3-modal-content w3-animate-zoom  w3-'+ color + '" style="padding:50px;text-align:center">\
+                  <span onclick="document.getElementById(\'id0'+ num + '\').style.display=\'none\'"\
+                        class="w3-button w3-display-topright">&times;</span>\
+                  <h2>'+ title + '</h2>\
+                  <p>'+ message + '</p>\
+            </div>\
+         </div>');
+         document.getElementById('id0' + num).style.display = 'block';
+      }
+      function sound(src) {
+         this.sound = document.createElement("audio");
+         this.sound.src = src;
+         this.sound.setAttribute("preload", "auto");
+         this.sound.setAttribute("controls", "none");
+         this.sound.style.display = "none";
+         document.body.appendChild(this.sound);
+         this.play = function () {
+            this.sound.play();
+         }
+         this.stop = function () {
+            this.sound.pause();
+         }
+      }
       //Initialiing the Game
       function startGame() {
          makeBoard();
@@ -335,7 +579,7 @@
          //Plotting Players
          for (let i = 1; i <= noOfPlayer; i++) {
             $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
-            $("body").append('<div id="playerbox'+i+'" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> Player ' + i + '</span><button onclick="doChance('+i+')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="100px"></button></div>');
+            $("body").append('<div id="playerbox' + i + '" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> Player ' + i + '</span><button onclick="doChance(' + i + ')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="100px"></button></div>');
             playersPos.push(0);
          }
          giveChanceTo(1);
@@ -384,7 +628,16 @@
 
          //Plotting Snakes
          for (var i = 1; i <= noOfSnakes; i++) {
-            var pos = getSnakePos(i);
+            
+
+
+            if ($('input[name="gamepreference"]:checked').val() == 'organized') {
+               
+               var pos = arrangements[boardNumber]["snakeHead"][i - 1];
+            } else {
+               var pos = getSnakePos(i);
+              
+            }
 
             renderSnake(i, pos);
             snakeHead.push(pos);
@@ -463,7 +716,18 @@
 
          //Plotting Ladder
          for (var i = 1; i <= noOfLadder; i++) {
+            // var pos = getLadderPos(i);
+
+
+
+
+            if ($('input[name="gamepreference"]:checked').val() == 'organized') {
+               var pos = arrangements[boardNumber]["ladderHead"][i - 1];
+            } else {
             var pos = getLadderPos(i);
+
+            }
+
 
             renderLadder(i, pos);
             ladderHead.push(pos);
@@ -631,7 +895,7 @@
       // Useful Functions - rand, movePlayer, makePoint
 
       function rand(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
-      function movePlayer(player, pos) { $("#player" + player).css({ top: calcY(pos), left: calcX(pos) }); }
+      function movePlayer(player, pos) { $("#player" + player).css({ top: calcY(pos), left: calcX(pos) + (player - 1) * (0.1 * boxSize) }); }
       function makePoint(pos) { ctx.beginPath(); ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI); ctx.stroke(); }
 
 
