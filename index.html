@@ -35,10 +35,23 @@
          position: relative;
       }
 
-      #test img {
+      #test>img {
          position: absolute;
          top: 0px;
          transition: 1s ease;
+      }
+      #setting {
+         position: absolute;
+         /* float: right; */
+         top: 512px;
+         right:0px;
+         transition: 1s ease;
+      }
+      #setting>button, #setting>button>img{
+         border-radius: 50%;
+         outline:none;
+         padding: 2px;
+         cursor: pointer;
       }
 
       #startingZone img {
@@ -201,6 +214,10 @@
          <img src="img/ladder10.png" id="ladder10" class="hidden" data-down="3" data-side="1" data-left="0"
             data-right="1" width="100px" data-headx="0">
 
+         <div id="setting">
+            <button onclick="playPauseMusic()"><img id="sound" src="img/sound-off.png" alt="Sound-Off" width="30px"></button>
+            <button onclick=""><img id="score" src="img/score.jpg" alt="Sound-Off" width="30px"></button>
+         </div>
       </div>
       <div id="startingZone">
          <!-- <img src="img/player1.png" alt="Red Player" width="50px">
@@ -258,8 +275,8 @@
 
    <!-- <//screen> -->
    <div id="screen" class="">
-         <img src="img/snl.png" alt="" width="400px">
-         <div id="box">
+      <img src="img/snl.png" alt="" width="400px">
+      <div id="box">
          <center>
             <h3>Select no. of Players</h3>
 
@@ -272,18 +289,20 @@
             </select>
 
             <h3>Preference for Snake & Ladders Position</h3>
-            <input onchange="updatePreference()"  class="w3-radio" id="org" type="radio" name="gamepreference" value="organized">
+            <input onchange="updatePreference()" class="w3-radio" id="org" type="radio" name="gamepreference"
+               value="organized">
             <label for="org">Organized</label>
 
-            <input onchange="updatePreference()"  class="w3-radio" id="rand" type="radio" name="gamepreference" value="random">
+            <input onchange="updatePreference()" class="w3-radio" id="rand" type="radio" name="gamepreference"
+               value="random">
             <label for="rand">Random</label>
 
-            
+
             <div id="selection-organized" style="display: none;">
                <h3>Choose Board</h3>
                <input class="w3-radio" id="board1" type="radio" name="board" value="0">
                <label for="board1"><img src="img/board1.jpg" width="100px" alt="Board 1"></label>
-            
+
                <input class="w3-radio" id="board2" type="radio" name="board" value="1">
                <label for="board2"><img src="img/board2.jpg" width="100px" alt="Board 2"></label>
             </div>
@@ -291,15 +310,19 @@
             <div id="selection-random" style="display: none;">
                <h3>No. of Snakes</h3>
                <span id="snake-range-value">4</span>
-               <input class="w3-range" min="1" max="8" value="4" onchange="document.getElementById('snake-range-value').innerHTML=this.value" id="range-snake" type="range" name="range-snake" value="organized">
+               <input class="w3-range" min="1" max="8" value="4"
+                  onchange="document.getElementById('snake-range-value').innerHTML=this.value" id="range-snake"
+                  type="range" name="range-snake" value="organized">
                <input type="checkbox" name="checkbox-snake" id="checkbox-snake">
-            <label for="checkbox-snake">Random</label>
+               <label for="checkbox-snake">Random</label>
 
                <h3>No. of Ladder</h3>
                <span id="ladder-range-value">5</span>
-               <input class="w3-range" min="1" max="10" value="5" onchange="document.getElementById('ladder-range-value').innerHTML=this.value" id="range-ladder" type="range" name="range-ladder" value="random">
+               <input class="w3-range" min="1" max="10" value="5"
+                  onchange="document.getElementById('ladder-range-value').innerHTML=this.value" id="range-ladder"
+                  type="range" name="range-ladder" value="random">
                <input type="checkbox" name="checkbox-ladder" id="checkbox-ladder">
-            <label for="checkbox-ladder">Random</label>
+               <label for="checkbox-ladder">Random</label>
 
             </div>
             <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>
@@ -341,6 +364,8 @@
       var moveSound = new sound("sound/move.mp3");
       var sixSound = new sound("sound/six.mp3");
       var winnerSound = new sound("sound/winner.mp3");
+      var gameMusic = new sound("sound/bgm.mp3");
+      var gameSound = true;
       var arrangements = [
          {
             snakeHead: [99, 65, 40, 25, 48, 78, 85],
@@ -349,36 +374,36 @@
             ladderTail: []
          },
          {
-            snakeHead: [62,86,98,38],
+            snakeHead: [62, 86, 98, 38],
             snakeTail: [],
             ladderHead: [47, 60, 72, 93, 49, 66],
             ladderTail: []
          }]
-      
 
 
 
 
 
-         $("#checkbox-snake").click(function () {
-               if ($(this).is(":checked")) {
-                  $("#range-snake").prop('disabled', true);
-                  $("#snake-range-value").hide();
-               } else {
-                  $("#range-snake").prop('disabled', false);
-                  $("#snake-range-value").show();
-               }
-            }); 
-            
-         $("#checkbox-ladder").click(function () {
-            if ($(this).is(":checked")) {
-               $("#range-ladder").prop('disabled', true);
-                  $("#ladder-range-value").hide();
-            } else {
-               $("#range-ladder").prop('disabled', false);
-                  $("#ladder-range-value").show();
-            }
-         });
+
+      $("#checkbox-snake").click(function () {
+         if ($(this).is(":checked")) {
+            $("#range-snake").prop('disabled', true);
+            $("#snake-range-value").hide();
+         } else {
+            $("#range-snake").prop('disabled', false);
+            $("#snake-range-value").show();
+         }
+      });
+
+      $("#checkbox-ladder").click(function () {
+         if ($(this).is(":checked")) {
+            $("#range-ladder").prop('disabled', true);
+            $("#ladder-range-value").hide();
+         } else {
+            $("#range-ladder").prop('disabled', false);
+            $("#ladder-range-value").show();
+         }
+      });
 
 
 
@@ -390,11 +415,11 @@
          console.log("Iam in the function");
          $('#selection-organized').slideUp();
          $('#selection-random').slideUp();
-         if($('input[name="gamepreference"]:checked').val() == 'organized'){
-         $('#selection-organized').slideDown();
+         if ($('input[name="gamepreference"]:checked').val() == 'organized') {
+            $('#selection-organized').slideDown();
 
-         }else{
-         $('#selection-random').slideDown();
+         } else {
+            $('#selection-random').slideDown();
 
          }
       }
@@ -406,7 +431,7 @@
          if ($('#noofplayer').val() == null) {
             // alert($('input[name="gamepreference"]:checked').val());
             alert("Please Select No. of Players");
-         }else if($('input[name="gamepreference"]:checked').val() == undefined){
+         } else if ($('input[name="gamepreference"]:checked').val() == undefined) {
 
             alert("Please Select any Preference \nOrganized or Random");
          } else if ($('input[name="gamepreference"]:checked').val() == 'organized' && $('input[name="board"]:checked').val() == undefined) {
@@ -414,11 +439,11 @@
             alert("Please Select a Board");
          } else {
 
-            if ($('input[name="gamepreference"]:checked').val() == 'organized'){
+            if ($('input[name="gamepreference"]:checked').val() == 'organized') {
                boardNumber = $('input[name="board"]:checked').val();
                noOfLadder = arrangements[boardNumber]['ladderHead'].length;
                noOfSnakes = arrangements[boardNumber]['snakeHead'].length;
-            }else{
+            } else {
 
                if ($('input[name="checkbox-snake"]').is(':checked')) {
                   noOfSnakes = rand(1, 8);
@@ -436,13 +461,40 @@
             $('#screen').hide();
             noOfPlayer = $('#noofplayer').val();
 
-            // var myMusic = new sound("sound/bgm.mp3");
-            // myMusic.play();
+            $('body').append('<audio id="game-music" loop>\
+                                 <source src="sound/bgminloop.mp3" type="audio/mp3">\
+                                 Your browser does not support the audio element.\
+                              </audio>');
+            document.getElementById('game-music').play();
+            var myAudio = document.getElementById('game-music');
+            if (typeof myAudio.loop == 'boolean') {
+               myAudio.loop = true;
+            }
+            else {
+               myAudio.addEventListener('ended', function () {
+                  this.currentTime = 0;
+                  this.play();
+               }, false);
+            }
+
+
             startGame();
-            
+
          }
       }
 
+      function playPauseMusic() {
+         if(gameSound){
+            document.getElementById('game-music').pause();
+            $('#sound').prop('src','img/sound-on.png');
+            gameSound = false;
+         }else{
+            document.getElementById('game-music').play();
+            $('#sound').prop('src', 'img/sound-off.png');
+
+            gameSound = true;
+         }
+      }
       function giveChanceTo(playerNum) {
 
          if (playerNum > noOfPlayer) {
@@ -497,8 +549,8 @@
                gameSound = winnerSound;
                playersPos[playerNum - 1] = 110;
 
-               $("#playerbox" + playerNum + " button img").attr("src","img/dice/winner"+winnerNum+".jpg");
-               alertbox(playerNum, colors[playerNum - 1], "Winner", "Player " + playerNum + " Won the Game & got " + winnerNum + " position");
+               $("#playerbox" + playerNum + " button img").attr("src", "img/dice/winner" + winnerNum + ".jpg");
+               alertbox(playerNum, colors[playerNum - 1], "Winner", "Player " + playerNum + " Won the Game & got " + romanize(winnerNum) + " position");
                winnerNum += 1;
             }
             movePlayer(playerNum, playersPos[playerNum - 1]);
@@ -558,6 +610,7 @@
          </div>');
          document.getElementById('id0' + num).style.display = 'block';
       }
+
       function sound(src) {
          this.sound = document.createElement("audio");
          this.sound.src = src;
@@ -570,6 +623,9 @@
          }
          this.stop = function () {
             this.sound.pause();
+         }
+         this.inLoop = function () {
+            this.sound.loop = true;
          }
       }
       //Initialiing the Game
@@ -628,15 +684,15 @@
 
          //Plotting Snakes
          for (var i = 1; i <= noOfSnakes; i++) {
-            
+
 
 
             if ($('input[name="gamepreference"]:checked').val() == 'organized') {
-               
+
                var pos = arrangements[boardNumber]["snakeHead"][i - 1];
             } else {
                var pos = getSnakePos(i);
-              
+
             }
 
             renderSnake(i, pos);
@@ -724,7 +780,7 @@
             if ($('input[name="gamepreference"]:checked').val() == 'organized') {
                var pos = arrangements[boardNumber]["ladderHead"][i - 1];
             } else {
-            var pos = getLadderPos(i);
+               var pos = getLadderPos(i);
 
             }
 
@@ -892,12 +948,21 @@
          ctx.drawImage(img, calcX(pos - shift), calcY(pos), $("#snake" + snakeNum).width(), $("#snake" + snakeNum).height());
       }
 
-      // Useful Functions - rand, movePlayer, makePoint
+      // Useful Functions - rand, movePlayer, makePoint, Romanize
 
       function rand(min, max) { return Math.floor(Math.random() * (max - min)) + min; }
       function movePlayer(player, pos) { $("#player" + player).css({ top: calcY(pos), left: calcX(pos) + (player - 1) * (0.1 * boxSize) }); }
       function makePoint(pos) { ctx.beginPath(); ctx.arc(calcX(pos) + (boxSize / 2), calcY(pos) + (boxSize / 2), 4, 0, 2 * Math.PI); ctx.stroke(); }
-
+      function romanize(num) {
+         var lookup = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 }, roman = '', i;
+         for (i in lookup) {
+            while (num >= lookup[i]) {
+               roman += i;
+               num -= lookup[i];
+            }
+         }
+         return roman;
+      }
 
 
    </script>
