@@ -1,7 +1,30 @@
+<!-- 
+   Project: Snake and Ladder
+   Author: Harsh Vishwakarma
+   Email: harshprogrammer782@gmail.com
+   Description: This is a game designed using HTML, CSS & JavaScipt.
+                In Start you have to choose Number of players and then you have to
+                choose in which manner snakes and ladder must appear, 
+                Options available are Orgainzed and Random,
+                If you choose Organized then you have to select a board from different boards.
+                Or if you choose Random then you have to select number of snakes from 1-8 or you can make them random, 
+                similarly you have to select number of ladder or you can make them random.
+                After that You have to Enter the Names and Color Preference for All the Players.
+                after doing all such things The Game will begin.
+                All players will get their chance one by one, If player gets 6 he will get another chance and
+                If Player comes in position of start of ladder it promotes to end of ladder or
+                If Player comes in position of head of snake it demotes to tail of ladder 
+                You can Turn on/Off Music anytime and Check ScoreBoard of game
+                if any player reaches 100 he will won the and will not get any chance in the further game
+                After all player reaches 100 game will Show ScoreCard and game will End.
+ -->
+
 <!DOCTYPE html>
 <html>
 
 <head>
+
+   <!-- Inline CSS for Game -->
    <style>
       * {
          margin: 0;
@@ -20,9 +43,6 @@
          background-position: center;
          background-size: cover;
          /* background: #ffff88; */
-
-
-
       }
 
       #startingZone {
@@ -40,16 +60,19 @@
          top: 0px;
          transition: 1s ease;
       }
+
       #setting {
          position: absolute;
          /* float: right; */
          top: 512px;
-         right:0px;
+         right: 0px;
          transition: 1s ease;
       }
-      #setting>button, #setting>button>img{
+
+      #setting>button,
+      #setting>button>img {
          border-radius: 50%;
-         outline:none;
+         outline: none;
          padding: 2px;
          cursor: pointer;
       }
@@ -162,15 +185,19 @@
          color: white;
       }
    </style>
+   <!-- W3.CSS -->
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <!-- JQUERY -->
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
-
+   <!-- Canvas Div -->
    <div id="canvasdiv">
-      <div id="winnerZone"></div>
+      <!-- Test Div for Snakes and Ladders -->
       <div id="test">
+
+         <!-- Snakes -->
          <img src="img/snake01.png" class="hidden" id="snake1" data-down="4" data-left="0" data-side="1" data-bottom="4"
             data-right="2" width="130px" data-headx="0">
          <img src="img/snake03.png" class="hidden" id="snake2" data-down="3" data-left="0" data-side="2" data-bottom="3"
@@ -192,7 +219,7 @@
          <!-- <img src="img/snake02.png" class="hidden" id="snake2" data-down="5" data-left="2" data-side="-2" data-bottom="5" data-right="0" width="115px" data-headx="2"> -->
          <!-- <img src="img/snake08.png" class="hidden" id="snake8" data-down="5" data-left="2" data-side="-2" data-bottom="5" data-right="0" width="115px" data-headx="2"> -->
 
-
+         <!-- Ladders -->
          <img src="img/ladder01.png" id="ladder1" class="hidden" data-down="3" data-side="-1" data-left="2"
             data-right="0" width="100px" data-headx="1">
          <img src="img/ladder02.png" id="ladder2" class="hidden" data-down="3" data-side="0" data-left="0"
@@ -214,17 +241,23 @@
          <img src="img/ladder10.png" id="ladder10" class="hidden" data-down="3" data-side="1" data-left="0"
             data-right="1" width="100px" data-headx="0">
 
+         <!-- Settings | Play/Pause Sound and Show Score Card -->
          <div id="setting">
-            <button onclick="playPauseMusic()"><img id="sound" src="img/sound-off.png" alt="Sound-Off" width="30px"></button>
-            <button onclick=""><img id="score" src="img/score.jpg" alt="Sound-Off" width="30px"></button>
+            <button onclick="playPauseMusic()"><img id="sound" src="img/sound-on.png" alt="Sound-Off"
+                  width="30px"></button>
+            <button onclick="showScoreCard()"><img id="score" src="img/score.jpg" alt="Sound-Off" width="30px"></button>
          </div>
       </div>
+
+      <!-- Staring Zone where all players will Start -->
       <div id="startingZone">
          <!-- <img src="img/player1.png" alt="Red Player" width="50px">
          <img src="img/player2.png" alt="Red Player" width="50px">
          <img src="img/player3.png" alt="Red Player" width="50px">
          <img src="img/player4.png" alt="Red Player" width="50px"> -->
       </div>
+
+      <!-- Canvas | The Actual Board -->
       <canvas id="myCanvas" width="500" height="500" style="border:5px solid #8d6e63;">
          Your browser does not support the canvas element.
       </canvas>
@@ -236,6 +269,7 @@
          <h3>Warning!</h3>
          <p>Yellow often indicates a warning that might need attention.</p>
       </div> -->
+
    </div>
 
 
@@ -273,11 +307,12 @@
             width="100px"></button>
    </div> -->
 
+
    <!-- <//screen> -->
    <div id="screen" class="">
       <img src="img/snl.png" alt="" width="400px">
       <div id="box">
-         <center>
+         <center id="center-box">
             <h3>Select no. of Players</h3>
 
             <select id="noofplayer" class="w3-select" name="option">
@@ -325,15 +360,16 @@
                <label for="checkbox-ladder">Random</label>
 
             </div>
-            <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>
+            <br><br><button onclick="updatePlayer()" class="w3-button w3-blue w3-round-xlarge">Next</button>
          </center>
       </div>
    </div>
 
    <script>
+
+      //Declaring all Variables
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d");
-
       var boardSize = 500;
       var boardColumn = 10;
       var boxSize = boardSize / boardColumn;
@@ -351,13 +387,16 @@
       var ladderTail = [];
       var noOfPlayer = 0;
       var winnerNum = 1;
+      var gamePreference = "";
       var boardNumber = 0;
+      var scoreNum = 1;
       var positions = [["topleft"],
       ["topleft", "bottomright"],
       ["topleft", "bottomleft", "bottomright"],
       ["topleft", "bottomleft", "bottomright", "topright"]]
-      var colors = ["red", "green", "blue", "yellow"];
-      var playersPos = []
+      var colors = [];
+      var playerNames = [];
+      var playersPos = [];
       var rollDice = new sound("sound/rolldice.mp3");
       var snakeSound = new sound("sound/snake.mp3");
       var ladderSound = new sound("sound/ladder.mp3");
@@ -384,8 +423,9 @@
 
 
 
-
+      // Function to disable Range when Snake Checkbox is active
       $("#checkbox-snake").click(function () {
+         // If Snake-checkbox is checked
          if ($(this).is(":checked")) {
             $("#range-snake").prop('disabled', true);
             $("#snake-range-value").hide();
@@ -395,7 +435,9 @@
          }
       });
 
+      // Function to disable Range when Ladder Checkbox is active
       $("#checkbox-ladder").click(function () {
+         // If Ladder-checkbox is checked
          if ($(this).is(":checked")) {
             $("#range-ladder").prop('disabled', true);
             $("#ladder-range-value").hide();
@@ -410,47 +452,53 @@
 
 
 
-
+      // Function to change data on Selection of Organized/Random
       function updatePreference() {
-         console.log("Iam in the function");
+         // console.log("Iam in the function");
          $('#selection-organized').slideUp();
          $('#selection-random').slideUp();
+
+         // If gamepreference is organized
          if ($('input[name="gamepreference"]:checked').val() == 'organized') {
             $('#selection-organized').slideDown();
-
          } else {
             $('#selection-random').slideDown();
-
          }
       }
 
 
 
-
+      // Update noOfPlayer, gamePreference, boardNumber, noOfSnakes, noOfLadder
       function updatePlayer() {
+         // If noOfPlayer is not Selected
          if ($('#noofplayer').val() == null) {
             // alert($('input[name="gamepreference"]:checked').val());
             alert("Please Select No. of Players");
-         } else if ($('input[name="gamepreference"]:checked').val() == undefined) {
+         }
+         // If gamepreference is not selected
+         else if ($('input[name="gamepreference"]:checked').val() == undefined) {
 
             alert("Please Select any Preference \nOrganized or Random");
-         } else if ($('input[name="gamepreference"]:checked').val() == 'organized' && $('input[name="board"]:checked').val() == undefined) {
+         }
+         // If board is not selected
+         else if ($('input[name="gamepreference"]:checked').val() == 'organized' && $('input[name="board"]:checked').val() == undefined) {
 
             alert("Please Select a Board");
          } else {
-
-            if ($('input[name="gamepreference"]:checked').val() == 'organized') {
+            gamePreference = $('input[name="gamepreference"]:checked').val();
+            // If game preference is organized
+            if (gamePreference == 'organized') {
                boardNumber = $('input[name="board"]:checked').val();
                noOfLadder = arrangements[boardNumber]['ladderHead'].length;
                noOfSnakes = arrangements[boardNumber]['snakeHead'].length;
             } else {
-
+               // If Snake-Checkbox is checked
                if ($('input[name="checkbox-snake"]').is(':checked')) {
                   noOfSnakes = rand(1, 8);
                } else {
                   noOfSnakes = Number($('input[name="range-snake"]').val());
                }
-
+               // If Ladder-Checkbox is checked
                if ($('input[name="checkbox-ladder"]').is(':checked')) {
                   noOfLadder = rand(1, 10);
                } else {
@@ -458,53 +506,101 @@
                }
             }
 
-            $('#screen').hide();
+            // assigning noOfPlayer
             noOfPlayer = $('#noofplayer').val();
 
+            var string = "";
+            for (let i = 0; i < noOfPlayer; i++) {
+               string += '<input id="name-player' + (i + 1) + '" class="w3-input w3-border w3-round" type="text" placeholder="Player-' + (i + 1) + ' Name">\
+                  <select class="w3-select" id="color-player'+ (i + 1) + '">\
+        <option value="0" selected disabled>Player-'+ (i + 1) + ' Color</option>\
+        <option value="red">Red</option>\
+        <option value="green">Green</option>\
+        <option value="blue">Blue</option>\
+        <option value="yellow">Yellow</option>\
+    </select><br><br>';
+            }
+
+            // changing center-box's content after storing data of all variables
+            $('#center-box').html(string + '<button onclick="updateNameColor()" class="w3-button w3-blue w3-round-xlarge">Start Game</button>');
+
+            // function for having only one color choice
+            // $("select").change(function (e) {
+            //    var $s = $(e.target);
+            //    $("select").not($s).find("option[value=" + $s.val() + "]").remove();
+            // });
+         }
+      }
+
+      //function for updating Player NAmes and desired colors
+      function updateNameColor() {
+         var found = false;
+         for (var i = 0; i < noOfPlayer; i++) {
+            // If player name was not Entered
+            if ($('#name-player' + (i + 1)).val() == "") {
+               alert("Please Enter Name of Player" + (i + 1))
+               found = true;
+               break;
+            }
+            // IF Color was not selected
+            else if (document.getElementsByClassName('w3-select')[i].value == "0") {
+               alert("Please Choose Color for Player" + (i + 1))
+               found = true;
+               break;
+            }
+         }
+         if (!found) {
+            for (var i = 0; i < noOfPlayer; i++) {
+               playerNames[i] = $('#name-player' + (i + 1)).val();
+               colors[i] = document.getElementsByClassName('w3-select')[i].value;
+
+            }
+            // hiding screen to start game
+            $('#screen').hide();
+
+            // Background music
             $('body').append('<audio id="game-music" loop>\
                                  <source src="sound/bgminloop.mp3" type="audio/mp3">\
                                  Your browser does not support the audio element.\
                               </audio>');
             document.getElementById('game-music').play();
-            var myAudio = document.getElementById('game-music');
-            if (typeof myAudio.loop == 'boolean') {
-               myAudio.loop = true;
-            }
-            else {
-               myAudio.addEventListener('ended', function () {
-                  this.currentTime = 0;
-                  this.play();
-               }, false);
-            }
 
-
+            //Initializing the Actual Game
             startGame();
-
          }
+
+
       }
 
+      // Function to Play or pause Background Music
       function playPauseMusic() {
-         if(gameSound){
+         // If its already running
+         if (gameSound) {
             document.getElementById('game-music').pause();
-            $('#sound').prop('src','img/sound-on.png');
-            gameSound = false;
-         }else{
-            document.getElementById('game-music').play();
             $('#sound').prop('src', 'img/sound-off.png');
-
+            gameSound = false;
+         } else {
+            document.getElementById('game-music').play();
+            $('#sound').prop('src', 'img/sound-on.png');
             gameSound = true;
          }
       }
+
+      // Function to give chance to specific player by playerNum
       function giveChanceTo(playerNum) {
 
+         // If playerNum is greater than number of player then set playerNum to 1
          if (playerNum > noOfPlayer) {
             playerNum = 1;
          }
+
+         // If he is already a winner {Player reached 100} give chance to another
          if (playersPos[playerNum - 1] >= 100) {
             giveChanceTo(playerNum + 1);
             console.log("This user is winner")
          } else {
 
+            // Disabling all player box
             for (let i = 1; i <= noOfPlayer; i++) {
                $("#playerbox" + i).removeClass("w3-" + colors[i - 1]);
                $("#playerbox" + i + " button").removeClass("activebutton");
@@ -512,6 +608,7 @@
                $("#playerbox" + i).addClass("disabled");
             }
 
+            // MAking PlayerNum's Player Box Active
             $("#playerbox" + playerNum).addClass("w3-" + colors[playerNum - 1]);
             $("#playerbox" + playerNum + " button").addClass("activebutton");
             $("#playerbox" + playerNum + " button").prop('disabled', false);
@@ -522,35 +619,44 @@
       }
 
       function doChance(playerNum) {
-
+         // disabling dice button
          $("#playerbox" + playerNum + " button").prop("disabled", true);
-         var val = rand(1, 7);
-         var path = "img/dice/" + val + ".jpg"
+         var val = rand(1, 7); //taking value from 1 to 6 {7 is not excluded}
+         var path = "img/dice/" + val + ".jpg"; // path to dice image
 
 
-
+         // Rolling dice for 2 second
          var now = new Date().getTime();
          $("#playerbox" + playerNum + " button img").attr("src", "img/dice/roll.gif")
          rollDice.play();
-
          setTimeout(harsh, 2000,)
 
          function harsh() {
             console.log(val);
 
-            $("#playerbox" + playerNum + " button img").attr("src", path)
+            $("#playerbox" + playerNum + " button img").attr("src", path);
             gameSound = moveSound;
             playersPos[playerNum - 1] += val;
+            // If it is moving out of 100
             if (playersPos[playerNum - 1] > 100) {
                playersPos[playerNum - 1] -= val;
                giveChanceTo(playerNum + 1);
                return 0;
-            } else if (playersPos[playerNum - 1] == 100) {
+            } 
+            // If he wins {pos is 100}
+            else if (playersPos[playerNum - 1] == 100) {
                gameSound = winnerSound;
-               playersPos[playerNum - 1] = 110;
+               // playersPos[playerNum - 1] = 110;
 
                $("#playerbox" + playerNum + " button img").attr("src", "img/dice/winner" + winnerNum + ".jpg");
-               alertbox(playerNum, colors[playerNum - 1], "Winner", "Player " + playerNum + " Won the Game & got " + romanize(winnerNum) + " position");
+               alertbox(playerNum, colors[playerNum - 1], "Winner", playerNames[playerNum - 1] + " Won the Game & got " + romanize(winnerNum) + " position");
+               
+               if (winnerNum==noOfPlayer) {
+                  
+                  gameSound.play();
+                  showScoreCard();
+                  return 0;
+               }
                winnerNum += 1;
             }
             movePlayer(playerNum, playersPos[playerNum - 1]);
@@ -584,11 +690,13 @@
                }
                console.log("snake detected")
             }
+            // If Player gets 6
             if (val == 6) {
+               if(gameSound!= snakeSound || gameSound != ladderSound || gameSound!=winnerSound){
                gameSound = sixSound;
+               }
                giveChanceTo(playerNum);
             } else {
-
                giveChanceTo(playerNum + 1);
             }
             gameSound.play();
@@ -598,7 +706,7 @@
 
 
 
-
+      // Function to display a alert {especially Winner}
       function alertbox(num, color, title, message) {
          $("body").prepend('<div id="id0' + num + '" class="w3-modal alertbox" style="background:rgba(0,0,0,0.9);" onclick="this.style.display=\'none\'"> \
             <div class="w3-modal-content w3-animate-zoom  w3-'+ color + '" style="padding:50px;text-align:center">\
@@ -611,6 +719,29 @@
          document.getElementById('id0' + num).style.display = 'block';
       }
 
+      // Function to Show Score Card
+      function showScoreCard() {
+         var playersPosCopy = playersPos.slice();
+         var playersPosDup = playersPos.slice();
+         playersPosCopy.sort();
+         playersPosCopy.reverse();
+         var string = '';
+         for (let i = 0; i < noOfPlayer; i++) {
+            var x = playersPosDup.indexOf(playersPosCopy[i]);
+            // alert(playersPosCopy[i]+" "+x);
+
+            string += '<div class="w3-' + colors[x] + ' w3-padding-large w3-margin-bottom">' + romanize(i + 1) + ' - ' + playerNames[x] + ' is on ' + playersPos[x] + '</div>';
+            playersPosDup[x] = -1;
+         }
+         $("body").append('<div id="id' + scoreNum + '" class="w3-modal alertbox" style="background:rgba(0,0,0,0.9);" onclick="this.style.display=\'none\'"> \
+            <div class="w3-modal-content w3-animate-zoom  w3-white" style="padding:50px;text-align:center">\
+                  <span onclick="document.getElementById(\'id'+ scoreNum + '\').style.display=\'none\'"\
+                        class="w3-button w3-display-topright">&times;</span>'+ string + '</div></div>');
+         document.getElementById('id' + scoreNum).style.display = 'block';
+         scoreNum += 1;
+      }
+
+      // Function for Sounds
       function sound(src) {
          this.sound = document.createElement("audio");
          this.sound.src = src;
@@ -628,16 +759,18 @@
             this.sound.loop = true;
          }
       }
+
       //Initialiing the Game
       function startGame() {
          makeBoard();
 
          //Plotting Players
          for (let i = 1; i <= noOfPlayer; i++) {
-            $("#startingZone").append('<img src="img/player' + i + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
-            $("body").append('<div id="playerbox' + i + '" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> Player ' + i + '</span><button onclick="doChance(' + i + ')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="100px"></button></div>');
+            $("#startingZone").append('<img src="img/player-' + colors[i - 1] + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
+            $("body").append('<div id="playerbox' + i + '" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> ' + playerNames[i - 1] + '</span><button onclick="doChance(' + i + ')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="100px"></button></div>');
             playersPos.push(0);
          }
+         // giving Chance to Player 1 in the beginning
          giveChanceTo(1);
       }
 
@@ -687,7 +820,7 @@
 
 
 
-            if ($('input[name="gamepreference"]:checked').val() == 'organized') {
+            if (gamePreference == 'organized') {
 
                var pos = arrangements[boardNumber]["snakeHead"][i - 1];
             } else {
@@ -706,19 +839,19 @@
 
 
                //Shifting from Bottom and Left
-               var bottom = Math.ceil(pos / 10) - 1;
-               if (snakeBottom >= bottom) { pos += 10; }
+               var bottom = Math.ceil(pos / boardColumn) - 1;
+               if (snakeBottom >= bottom) { pos += boardColumn; }
 
                //for left to right
-               if (Math.ceil(pos / 10) % 2 != 0) {
-                  var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+               if (Math.ceil(pos / boardColumn) % 2 != 0) {
+                  var right = boardColumn - (pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn));
                   if (snakeRight >= right) { pos -= snakeRight; }
                   // console.log("pos = " + pos + " right=" + right + " snakeRight=" + snakeRight);
 
                }
                //for right to left
                else {
-                  var right = (pos % 10) - 1;
+                  var right = (pos % boardColumn) - 1;
                   if (snakeRight >= right) { pos += snakeRight; }
                }
 
@@ -745,23 +878,23 @@
                var snakeDown = Number($("#snake" + snakeNum).attr("data-bottom"));
                if (snakeDown % 2 == 0) {
                   //for left to right
-                  if (Math.ceil(pos / 10) % 2 != 0) {
-                     bottom = pos - (snakeDown * 10) + snakeSide;
+                  if (Math.ceil(pos / boardColumn) % 2 != 0) {
+                     bottom = pos - (snakeDown * boardColumn) + snakeSide;
                   }
                   //for right to left
                   else {
-                     bottom = pos - (snakeDown * 10) - snakeSide;
+                     bottom = pos - (snakeDown * boardColumn) - snakeSide;
                   }
                } else {
                   //for left to right
-                  if (Math.ceil(pos / 10) % 2 != 0) {
-                     var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
-                     bottom = pos - ((snakeDown - 1) * 10) - snakeSide - (2 * left) - 1;
+                  if (Math.ceil(pos / boardColumn) % 2 != 0) {
+                     var left = pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn) - 1;
+                     bottom = pos - ((snakeDown - 1) * boardColumn) - snakeSide - (2 * left) - 1;
                   }
                   //for right to left
                   else {
-                     var right = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
-                     bottom = pos - ((snakeDown - 1) * 10) + snakeSide - (2 * right) - 1;
+                     var right = pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn) - 1;
+                     bottom = pos - ((snakeDown - 1) * boardColumn) + snakeSide - (2 * right) - 1;
                      // console.log("right :" + right + " pos :" + pos + " bottom :" + bottom);
                   }
                }
@@ -777,7 +910,7 @@
 
 
 
-            if ($('input[name="gamepreference"]:checked').val() == 'organized') {
+            if (gamePreference == 'organized') {
                var pos = arrangements[boardNumber]["ladderHead"][i - 1];
             } else {
                var pos = getLadderPos(i);
@@ -797,14 +930,14 @@
 
 
                //Shifting from Bottom and Left
-               var bottom = Math.ceil(pos / 10) - 1;
-               if (ladderBottom >= bottom) { pos += 10; }
+               var bottom = Math.ceil(pos / boardColumn) - 1;
+               if (ladderBottom >= bottom) { pos += boardColumn; }
 
                //for left to right
-               if (Math.ceil(pos / 10) % 2 != 0) {
-                  var right = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+               if (Math.ceil(pos / boardColumn) % 2 != 0) {
+                  var right = boardColumn - (pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn));
                   if (ladderRight >= right) { pos -= ladderRight; }
-                  var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
+                  var left = pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn) - 1;
 
                   console.log("pos = " + pos + " left=" + left + " ladderRight=" + ladderRight);
                   if (ladderLeft >= left) { pos += ladderLeft; }
@@ -812,9 +945,9 @@
                }
                //for right to left
                else {
-                  var right = (pos % 10) - 1;
+                  var right = (pos % boardColumn) - 1;
                   if (ladderRight >= right) { pos += ladderRight; }
-                  var left = 10 - (pos - ((Math.ceil(pos / 10) - 1) * 10));
+                  var left = boardColumn - (pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn));
                   if (ladderLeft >= left) { pos += ladderLeft; }
                }
 
@@ -849,8 +982,8 @@
                var ladderDown = Number($("#ladder" + ladderNum).attr("data-down"));
                if (ladderDown % 2 == 0) {
                   //for left to right
-                  if (Math.ceil(pos / 10) % 2 != 0) {
-                     bottom = pos - (ladderDown * 10) + ladderSide;
+                  if (Math.ceil(pos / boardColumn) % 2 != 0) {
+                     bottom = pos - (ladderDown * boardColumn) + ladderSide;
                   }
                   //for right to left
                   else {
@@ -858,14 +991,14 @@
                   }
                } else {
                   //for left to right
-                  if (Math.ceil(pos / 10) % 2 != 0) {
-                     var left = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
-                     bottom = pos - ((ladderDown - 1) * 10) - ladderSide - (2 * left) - 1;
+                  if (Math.ceil(pos / boardColumn) % 2 != 0) {
+                     var left = pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn) - 1;
+                     bottom = pos - ((ladderDown - 1) * boardColumn) - ladderSide - (2 * left) - 1;
                   }
                   //for right to left
                   else {
-                     var right = pos - ((Math.ceil(pos / 10) - 1) * 10) - 1;
-                     bottom = pos - ((ladderDown - 1) * 10) + ladderSide - (2 * right) - 1;
+                     var right = pos - ((Math.ceil(pos / boardColumn) - 1) * boardColumn) - 1;
+                     bottom = pos - ((ladderDown - 1) * boardColumn) + ladderSide - (2 * right) - 1;
                      // console.log("right :" + right + " pos :" + pos + " bottom :" + bottom);
                   }
                }
@@ -880,14 +1013,14 @@
       //Functions for Calculating X and Y
       function calcY(pos) {
          var a = boardColumn * boardColumn - pos;
-         var y = Math.floor(a / 10) * boxSize;
+         var y = Math.floor(a / boardColumn) * boxSize;
          // console.log("A= "+a);
          // console.log("y= " + y); 
          return y;
       }
       function calcX(pos) {
          var a = boardColumn * boardColumn - pos;
-         var y = Math.floor(a / 10);
+         var y = Math.floor(a / boardColumn);
          var x = a - y * boardColumn;
 
          if (y % 2 == 1) {
@@ -905,7 +1038,7 @@
       function renderSnake(snakeNum, pos) {
          // var img = document.getElementById("snake" + snakeNum);
          // console.log($("#snake" + snakeNum).attr("data-headx"));
-         var y = Math.floor((boardColumn * boardColumn - pos) / 10);
+         var y = Math.floor((boardColumn * boardColumn - pos) / boardColumn);
          // var shift = 0;
          // if (y % 2 != 0) {
          //    shift = Number($("#snake" + snakeNum).attr("data-headx"));
@@ -921,7 +1054,7 @@
       function renderLadder(ladderNum, pos) {
          // var img = document.getElementById("snake" + snakeNum);
          // console.log($("#snake" + snakeNum).attr("data-headx"));
-         var y = Math.floor((boardColumn * boardColumn - pos) / 10);
+         var y = Math.floor((boardColumn * boardColumn - pos) / boardColumn);
          var shift = 0;
          if (y % 2 != 0) {
             shift = Number($("#ladder" + ladderNum).attr("data-headx"));
