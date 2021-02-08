@@ -79,7 +79,7 @@
 
       #startingZone img {
          position: absolute;
-         top: 500px;
+         /* top: 500px; */
          transition: 1s ease;
       }
 
@@ -108,16 +108,25 @@
          display: flex;
          justify-content: center;
          align-items: center;
+         flex-wrap: wrap;
          position: fixed;
          top: 0;
          left: 0;
-         width: 100vw;
+         width: 100%;
          height: 100%;
          color: black;
          background: #ffff88;
          flex-direction: row;
       }
 
+      #screen>img{
+         flex-grow: 3;
+         max-width: 350px;
+      }
+      #box{
+         flex-grow: 4;
+         max-width: 400px;
+      }
       .alertbox {
          display: flex;
          justify-content: center;
@@ -184,7 +193,17 @@
          background: grey !important;
          color: white;
       }
+
+      @media screen and (max-width:800px) {
+         .playerbox span{
+            font-size: 0.8em;
+         }
+      }
    </style>
+
+   <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+   <title>Snake & Ladder | Games | Harsh Vishwakarma</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
    <!-- W3.CSS -->
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
    <!-- JQUERY -->
@@ -310,7 +329,7 @@
 
    <!-- <//screen> -->
    <div id="screen" class="">
-      <img src="img/snl.png" alt="" width="400px">
+      <img src="img/snl.png" alt="">
       <div id="box">
          <center id="center-box">
             <h3>Select no. of Players</h3>
@@ -371,6 +390,31 @@
       var canvas = document.getElementById("myCanvas");
       var ctx = canvas.getContext("2d");
       var boardSize = 500;
+      var aspectRatio = document.body.clientWidth / document.body.clientHeight;
+      if(aspectRatio<=0.6){
+
+         var newBoardSize = 0.92 * document.body.clientWidth;
+         var playerBoxSize = (document.body.clientHeight - (document.body.clientWidth*1.2))/2;
+      }else if(aspectRatio>=1.5){
+         var newBoardSize = 0.8 * document.body.clientHeight;
+         var playerBoxSize = (document.body.clientWidth - (document.body.clientHeight * 1.2)) / 2;
+
+      }
+      else{
+         if(aspectRatio<=1){
+         var newBoardSize = 0.65 * document.body.clientWidth;
+         var playerBoxSize = (document.body.clientWidth - (newBoardSize*1.2)) / 2;
+
+         }else{
+         var newBoardSize = 0.65 * document.body.clientHeight;
+         var playerBoxSize = (document.body.clientWidth - (newBoardSize*1.2)) / 2;
+
+
+         }
+
+      }
+      // $('#myCanvas').height(newBoardSize+"px");
+      // $('#test').width(newBoardSize+"px");
       var boardColumn = 10;
       var boxSize = boardSize / boardColumn;
       var oddBackground = "#2ab7ca";
@@ -393,7 +437,7 @@
       var positions = [["topleft"],
       ["topleft", "bottomright"],
       ["topleft", "bottomleft", "bottomright"],
-      ["topleft", "bottomleft", "bottomright", "topright"]]
+      ["topleft", "bottomleft", "bottomright", "topright"]];
       var colors = [];
       var playerNames = [];
       var playersPos = [];
@@ -764,12 +808,7 @@
       function startGame() {
          makeBoard();
 
-         //Plotting Players
-         for (let i = 1; i <= noOfPlayer; i++) {
-            $("#startingZone").append('<img src="img/player-' + colors[i - 1] + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
-            $("body").append('<div id="playerbox' + i + '" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> ' + playerNames[i - 1] + '</span><button onclick="doChance(' + i + ')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="100px"></button></div>');
-            playersPos.push(0);
-         }
+         
          // giving Chance to Player 1 in the beginning
          giveChanceTo(1);
       }
@@ -814,6 +853,8 @@
 
          }
 
+         boardSize = newBoardSize;
+         boxSize = boardSize / boardColumn;
 
          //Plotting Snakes
          for (var i = 1; i <= noOfSnakes; i++) {
@@ -1007,6 +1048,24 @@
          }
 
 
+      //Plotting Players
+      for (let i = 1; i <= noOfPlayer; i++) {
+         $("#startingZone").append('<img src="img/player-' + colors[i - 1] + '.png" id="player' + i + '" width="' + (0.8) * boxSize + 'px">');
+         $("body").append('<div id="playerbox' + i + '" class="playerbox w3-' + colors[i - 1] + ' ' + positions[noOfPlayer - 1][i - 1] + '"> <span> ' + playerNames[i - 1] + '</span><button onclick="doChance(' + i + ')" id="add" name="text" class="input button"><img id="gifbox" src="img/dice/rolldice.jpg" width="'+(playerBoxSize*0.5)+'px"></button></div>');
+         playersPos.push(0);
+         $('.playerbox').height(playerBoxSize+"px").width(playerBoxSize+"px");
+      }
+      
+
+      $('#myCanvas').height(newBoardSize+"px");
+      $('#test').width(newBoardSize+"px");
+      $('#startingZone').width(newBoardSize + "px");
+      $('#startingZone img').css({"top": newBoardSize + "px"});
+      $('#setting').css({"top": (newBoardSize+12) + "px"})
+
+
+
+
 
       }
 
@@ -1047,7 +1106,7 @@
          // }
 
          // console.log("pos = " + pos + "shiftt=" + shift);
-         $("#snake" + snakeNum).css({ "display": "block", "top": calcY(pos), "left": calcX(pos) });
+         $("#snake" + snakeNum).css({ "display": "block", "top": calcY(pos), "left": calcX(pos), "width": ($("#snake" + snakeNum).width()) * (boardSize / 500) });
       }
 
       //Render Ladder
@@ -1063,7 +1122,7 @@
          }
 
          // console.log("pos = " + pos + "shiftt=" + shift);
-         $("#ladder" + ladderNum).css({ "display": "block", "top": calcY(pos) + 5, "left": calcX(pos - shift) + 5 });
+         $("#ladder" + ladderNum).css({ "display": "block", "top": calcY(pos) + 5, "left": calcX(pos - shift) + 5, "width": ($("#ladder" + ladderNum).width()) * (boardSize / 500) });
       }
 
       //Plotting Snakes
